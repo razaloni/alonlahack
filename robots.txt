@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://razaloni.github.io/alonlahack/sitemap.xml
