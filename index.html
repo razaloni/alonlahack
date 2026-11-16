@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; manifest-src 'none'; frame-src https://www.google.com; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+
+<!-- אבטחה: CSP קשיח — בלי סקריפטים או סגנונות מוטמעים (אין 'unsafe-inline').
+     כל קוד חדש חייב לשבת בקובץ תחת css/ או js/, ולא בתוך ה-HTML. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.google.com; connect-src 'none'; manifest-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- SEO ושיתוף -->
 <title>אלון להק · סדנה לתיקוני גלשנים וערכות תיקון עצמי | כפר ויתקין</title>
 <meta name="description" content="סדנה לתיקוני גלשנים בכפר ויתקין: דינגים, ריילים, בתי חרב, שברים וצביעה. ערכת תיקון עצמי לדינגים קטנים. שולחים 3–5 תמונות ב-WhatsApp ומקבלים הערכת מחיר.">
 <meta property="og:title" content="אלון להק · סדנה לתיקוני גלשנים">
@@ -18,383 +23,17 @@
 <meta property="og:image:alt" content="גלשן על שולחן העבודה בסדנה של אלון להק">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index, follow">
-<meta name="theme-color" content="#121917">
 <link rel="canonical" href="https://razaloni.github.io/alonlahack/">
+
+<!-- מראה -->
+<meta name="theme-color" content="#121917">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121917'/%3E%3Cpath d='M16 4C11 11 8 17 8 21c0 3 3 6 8 7 5-1 8-4 8-7 0-4-3-10-8-17z' fill='none' stroke='%23E9B738' stroke-width='2.4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Assistant:wght@300;400;600;800&family=Heebo:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   פלטה: סדנה בלילה — שרף, קצף, נייר דבק
-   ============================================================ */
-:root{
-  --night:#121917;       /* רקע כהה — סגנון אתרי שייפרים */
-  --night-2:#1B2522;
-  --night-3:#26332F;
-  --bone:#F3EEE2;        /* טקסט על כהה */
-  --bone-dim:#B9B4A7;    /* טקסט משני על כהה — ניגודיות AA */
-  --foam:#F7F2E6;
-  --foam-2:#EFE8D8;
-  --shell:#FFFDF7;
-  --mist:#E7EFE9;
-  --ink:#22322F;
-  --ink-2:#4E5F5B;
-  --tape:#E9B738;
-  --tape-deep:#8A6208;
-  --resin:#207A70;
-  --resin-2:#39A296;
-  --rail:#5F6D68;
-  --alert:#C4432B;
+<link rel="stylesheet" href="css/styles.css">
 
-  --f-display:"Karantina", "Arial Hebrew", sans-serif;
-  --f-body:"Assistant", system-ui, sans-serif;
-  --f-util:"Heebo", system-ui, sans-serif;
-
-  --edge:1px solid rgba(34,50,47,.15);
-  --edge-d:1px solid rgba(243,238,226,.14);
-  --pad:clamp(20px, 5vw, 64px);
-  --maxw:1200px;
-}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--foam);color:var(--ink);
-  font-family:var(--f-body);font-weight:400;font-size:17px;line-height:1.65;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-img,svg,video{max-width:100%;display:block}
-a{color:inherit}
-button{font-family:inherit}
-:focus-visible{outline:3px solid var(--tape);outline-offset:3px;border-radius:2px}
-
-.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
-
-h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:.9;margin:0;letter-spacing:0}
-h2{font-size:clamp(52px,10vw,110px)}
-h3{font-size:clamp(28px,4.4vw,36px)}
-p{margin:0 0 1em}
-.lead{font-size:clamp(17px,2.2vw,21px);font-weight:300;max-width:56ch}
-
-.eyebrow{
-  font-family:var(--f-util);font-size:12px;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--rail);
-  margin:0 0 16px;display:flex;align-items:center;gap:10px;
-}
-.eyebrow::before{content:"";width:28px;height:2px;background:var(--tape)}
-
-section{padding-block:clamp(64px,10vw,130px);position:relative}
-.dark{background:var(--night);color:var(--bone)}
-.dark .eyebrow{color:var(--bone-dim)}
-.dark .lead{color:var(--bone)}
-.band-shell{background:var(--shell)}
-.band-sand{background:var(--foam-2)}
-.band-mist{background:var(--mist)}
-.sec-head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
-@media(max-width:760px){.sec-head{grid-template-columns:1fr}}
-
-.skip{position:absolute;inset-inline-start:-9999px;top:8px;z-index:100;background:var(--ink);color:#fff;
-  padding:12px 20px;border-radius:0 0 6px 6px;font-weight:800;text-decoration:none}
-.skip:focus{inset-inline-start:12px}
-
-/* ---------- חשיפה בגלילה ---------- */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *{animation:none !important;transition:none !important}
-  .rv{opacity:1;transform:none}
-}
-
-/* ---------- מידע משפטי (בפוטר) ---------- */
-.legalbox{margin-top:34px;border-top:1px solid rgba(34,50,47,.16);border-bottom:0}
-.legalbox > summary{font-family:var(--f-util);font-size:13px;font-weight:700;letter-spacing:.06em;
-  color:var(--ink-2);padding:16px 0 0;justify-content:flex-start;gap:8px}
-.legalbox > summary::after{font-size:18px;color:var(--resin)}
-.legalinner{padding:4px 0 6px}
-.legalinner details{border-bottom:1px solid rgba(34,50,47,.12)}
-.legalinner summary{font-family:var(--f-body);font-weight:800;font-size:16px;padding:12px 0}
-.legalinner summary::after{font-size:18px}
-.legalinner p,.legalinner ul{font-weight:300;max-width:72ch;font-size:14px;line-height:1.6;color:var(--ink-2)}
-.legalinner ul{padding-inline-start:18px;margin:0 0 12px}
-.legalinner li{margin-bottom:5px}
-.legalinner .updated{font-family:var(--f-util);font-size:11px;color:var(--rail);padding-bottom:14px}
-
-/* ---------- כפתורים ---------- */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:16px 28px;border:0;border-radius:999px;cursor:pointer;
-  font-family:var(--f-body);font-weight:800;font-size:17px;text-decoration:none;
-  transition:transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
-}
-.btn:hover{transform:translateY(-2px)}
-.btn:active{transform:translateY(0)}
-.btn-wa{background:#1FA855;color:#fff;box-shadow:0 6px 0 #147A3C}
-.btn-wa:hover{box-shadow:0 8px 0 #147A3C}
-.btn-tape{background:var(--tape);color:var(--ink);box-shadow:0 6px 0 #A87A0B}
-.btn-tape:hover{box-shadow:0 8px 0 #A87A0B}
-.btn-ghost{background:transparent;color:inherit;border:2px solid currentColor;font-weight:600}
-.btn-ghost:hover{background:currentColor}
-.dark .btn-ghost:hover{color:var(--night);background:var(--bone);border-color:var(--bone)}
-.band-shell .btn-ghost:hover,.band-mist .btn-ghost:hover,.band-sand .btn-ghost:hover{background:var(--ink);color:var(--shell);border-color:var(--ink)}
-.btn-sm{padding:11px 18px;font-size:15px}
-.btn svg{width:20px;height:20px;flex:none;fill:currentColor}
-
-#setup{display:none;background:var(--alert);color:#fff;font-family:var(--f-util);font-size:13px;padding:9px 16px;text-align:center}
-#setup code{background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px}
-
-/* ---------- כותרת עליונה ---------- */
-header{
-  position:sticky;top:0;z-index:40;background:rgba(18,25,23,.82);color:var(--bone);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:var(--edge-d);
-}
-.bar{display:flex;align-items:center;gap:16px;padding-block:12px}
-.logo{font-family:var(--f-display);font-size:clamp(32px,4vw,42px);line-height:1;text-decoration:none;white-space:nowrap}
-.logo span{color:var(--bone-dim);font-size:11px;font-weight:700;font-family:var(--f-util);letter-spacing:.16em;line-height:1.2;display:block;margin-top:4px}
-nav{margin-inline-start:auto;display:flex;gap:24px;align-items:center}
-nav a{font-size:15px;font-weight:600;text-decoration:none;padding-block:4px;border-bottom:2px solid transparent}
-nav a:hover{border-color:var(--tape)}
-nav a.new{position:relative}
-nav a.new::after{content:"חדש";position:absolute;top:-10px;inset-inline-end:-22px;font-family:var(--f-util);font-size:9px;font-weight:900;
-  background:var(--tape);color:var(--ink);padding:1px 5px;border-radius:3px;letter-spacing:.04em}
-@media(max-width:860px){nav a:not(.btn){display:none}}
-
-/* ---------- הירו ---------- */
-.hero{padding-top:clamp(36px,6vw,80px);padding-bottom:clamp(48px,7vw,96px);overflow:hidden}
-.hero::before{ /* גרעיניות עדינה, כמו נייר שיוף */
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;
-  background-image:radial-gradient(rgba(255,255,255,.9) 1px, transparent 1px);background-size:4px 4px;
-}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,4vw,64px);align-items:center;position:relative}
-@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
-.hero h1{font-size:clamp(78px,15vw,176px);line-height:.82;letter-spacing:-.01em}
-.hero h1 .ln{display:block}
-.hero h1 em{font-style:normal;color:var(--tape);display:block}
-.hero .lead{margin-top:22px;color:var(--bone)}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.hero-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;font-family:var(--f-util);font-size:13px}
-.hero-facts span{border:var(--edge-d);border-radius:999px;padding:6px 13px;color:var(--bone-dim)}
-
-/* לפני / אחרי */
-.ba{position:relative;max-width:420px;margin-inline:auto;width:100%}
-.ba-after{border-radius:18px;overflow:hidden;aspect-ratio:9/14;background:var(--night-2);box-shadow:0 30px 60px rgba(0,0,0,.45)}
-.ba-after video{width:100%;height:100%;object-fit:cover}
-.ba-before{position:absolute;bottom:-26px;inset-inline-end:-30px;width:44%;background:#fff;padding:8px 8px 30px;
-  transform:rotate(-6deg);box-shadow:0 18px 36px rgba(0,0,0,.4)}
-.ba-before{margin:0}
-.ba-before img{aspect-ratio:3/4;object-fit:cover;width:100%;height:auto}
-.ba-before figcaption{position:absolute;bottom:6px;inset-inline:0;text-align:center;font-family:var(--f-display);font-size:22px;color:var(--ink)}
-.tag-tape{position:absolute;font-family:var(--f-util);font-weight:900;font-size:12px;letter-spacing:.12em;
-  background:var(--tape);color:var(--ink);padding:6px 12px;transform:rotate(3deg);box-shadow:0 4px 10px rgba(0,0,0,.25)}
-.ba .tag-tape{top:18px;inset-inline-start:-12px}
-@media(max-width:900px){.ba{max-width:320px;margin-top:20px}.ba-before{inset-inline-end:-14px}}
-
-/* ---------- טיקר ---------- */
-.ticker{background:var(--tape);color:var(--ink);overflow:hidden;border-block:2px solid var(--night);padding-block:0}
-.ticker-track{display:flex;width:max-content;animation:tick 38s linear infinite}
-.ticker span{font-family:var(--f-display);font-size:clamp(30px,4vw,44px);line-height:1;padding:14px 0;white-space:nowrap}
-.ticker span::after{content:"✦";font-size:.5em;vertical-align:middle;margin-inline:28px}
-@keyframes tick{to{transform:translateX(50%)}}
-
-/* ---------- שירותים: רשימה ממוספרת ---------- */
-.svc-list{margin-top:56px;border-top:2px solid var(--ink)}
-.svc{display:grid;grid-template-columns:90px 1.1fr 1.4fr auto;gap:24px;align-items:center;padding:26px 0;border-bottom:var(--edge);
-  transition:background .2s ease, padding .2s ease}
-.svc:hover{background:var(--foam);padding-inline:14px}
-.svc .n{font-family:var(--f-util);font-weight:900;font-size:14px;color:var(--tape-deep);letter-spacing:.08em}
-.svc h3{font-size:clamp(32px,4.4vw,46px)}
-.svc p{font-size:16px;font-weight:300;color:var(--ink-2);margin:0}
-.svc .tag{font-family:var(--f-util);font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--ink-2);border:var(--edge);border-radius:999px;padding:4px 10px;white-space:nowrap}
-@media(max-width:820px){.svc{grid-template-columns:50px 1fr;gap:6px 14px}.svc p,.svc .tag{grid-column:2}.svc .tag{justify-self:start}}
-
-/* ---------- מהסדנה: וידאו ---------- */
-.reels{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
-@media(max-width:820px){.reels{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.reels{grid-template-columns:1fr;max-width:340px;margin-inline:auto}}
-.reel{margin:0;background:var(--night-2);border:var(--edge-d);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s ease}
-.reel:hover{transform:translateY(-6px)}
-.reel video{width:100%;aspect-ratio:9/16;object-fit:cover;background:#0b0f0e}
-.reel figcaption{padding:16px 18px 18px;font-size:15px;font-weight:300;color:var(--bone-dim)}
-.reel b{display:block;font-family:var(--f-display);font-weight:700;font-size:28px;color:var(--bone);margin-bottom:3px}
-.ig-cta{margin-top:36px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;color:var(--bone-dim);font-size:15px}
-
-/* ---------- ערכת תיקון עצמי ---------- */
-.kit{background:var(--shell);overflow:hidden}
-.kit-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:start;margin-top:52px}
-@media(max-width:900px){.kit-grid{grid-template-columns:1fr}}
-@media(max-width:560px){.kit-badge{width:76px;height:76px;font-size:18px;bottom:12px;inset-inline-end:12px}}
-.kit-visual{position:relative;background:#fff;border:var(--edge);border-radius:20px;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden}
-.kit-visual img{width:90%;height:auto}
-.kit-visual .tag-tape{top:22px;inset-inline-start:22px;transform:rotate(-3deg)}
-.kit-badge{position:absolute;bottom:20px;inset-inline-end:20px;width:104px;height:104px;border-radius:50%;background:var(--tape);color:var(--ink);
-  display:grid;place-items:center;text-align:center;font-family:var(--f-display);font-size:24px;line-height:.9;transform:rotate(-10deg)}
-.kit-info h3{font-size:clamp(44px,6vw,68px)}
-.price{display:flex;align-items:baseline;gap:12px;margin:18px 0 6px;flex-wrap:wrap}
-.price b{font-family:var(--f-display);font-size:48px;line-height:1}
-.price small{font-family:var(--f-util);font-size:13px;color:var(--ink-2)}
-.opt-label{font-family:var(--f-util);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--ink-2);margin:24px 0 10px;display:block}
-.variants{display:grid;grid-template-columns:1fr 1fr;gap:10px;border:0;padding:0;margin:0}
-.variants legend{padding:0}
-.variant{position:relative}
-.variant input{position:absolute;opacity:0;inset:0;cursor:pointer}
-.variant label{display:block;border:2px solid rgba(34,50,47,.2);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .15s, background .15s;height:100%}
-.variant label b{display:block;font-size:18px}
-.variant label span{font-size:14px;font-weight:300;color:var(--ink-2);line-height:1.45;display:block;margin-top:2px}
-.variant input:checked + label{border-color:var(--ink);background:var(--foam)}
-.variant input:focus-visible + label{outline:3px solid var(--tape);outline-offset:2px}
-.compat{margin:18px 0 0;padding:12px 16px;border-radius:12px;background:var(--mist);font-size:15px;font-weight:300}
-.compat a{color:var(--resin);font-weight:600}
-.which{font-size:14px;color:var(--ink-2);margin:10px 0 0}
-.which a{color:var(--resin);font-weight:600}
-.inbox{margin:24px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
-@media(max-width:480px){.inbox{grid-template-columns:1fr}}
-.inbox li{display:flex;gap:10px;align-items:flex-start;font-weight:300;font-size:16px}
-.inbox li::before{content:"";flex:none;width:9px;height:9px;margin-top:9px;background:var(--tape);transform:rotate(45deg)}
-.kit-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.safety{margin-top:18px;font-size:13px;color:var(--ink-2);font-family:var(--f-util);display:flex;gap:8px;align-items:flex-start}
-.safety::before{content:"!";flex:none;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--shell);font-weight:900;font-size:12px;display:grid;place-items:center;margin-top:1px}
-
-.brandlink{display:inline-flex;align-items:center;gap:12px;text-decoration:none;margin-bottom:14px;
-  font-family:var(--f-util);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--resin)}
-.brandlink .da-logo{height:40px;width:auto;flex:none}
-.brandlink:hover span{text-decoration:underline}
-/* לבד או בסדנה */
-.diy{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:64px}
-@media(max-width:760px){.diy{grid-template-columns:1fr}}
-.diy > div{border-radius:16px;padding:clamp(22px,3.4vw,34px)}
-.diy .yes{background:var(--mist)}
-.diy .no{background:var(--night);color:var(--bone)}
-.diy h3{margin-bottom:14px}
-.diy ul{margin:0 0 18px;padding:0;list-style:none}
-.diy li{padding:9px 0;border-bottom:1px solid rgba(34,50,47,.12);font-weight:300}
-.diy .no li{border-color:rgba(243,238,226,.14);color:var(--bone)}
-.diy li:last-child{border-bottom:0}
-.diy .yes li::before{content:"✓";color:var(--resin);font-weight:900;margin-inline-end:10px}
-.diy .no li::before{content:"✕";color:var(--tape);font-weight:900;margin-inline-end:10px}
-
-/* ---------- שלבים ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
-@media(max-width:860px){.steps{grid-template-columns:1fr}}
-.step{background:var(--shell);border-radius:16px;padding:30px 26px;border:var(--edge)}
-.step-n{font-family:var(--f-display);font-size:96px;line-height:.75;color:var(--tape);-webkit-text-stroke:1.5px var(--tape-deep);margin-bottom:18px}
-.step h3{margin-bottom:10px}
-.step p{margin:0;font-weight:300;color:var(--ink-2)}
-
-/* ---------- הסדנה / הגעה ---------- */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-@media(max-width:820px){.two{grid-template-columns:1fr}}
-.panel{background:var(--shell);border:var(--edge);border-radius:16px;padding:clamp(22px,3.4vw,34px)}
-.panel.alt{background:var(--mist)}
-.panel h3{margin-bottom:12px}
-.panel ul{margin:0 0 18px;padding-inline-start:20px}
-.panel li{margin-bottom:7px;font-weight:300}
-.videobox{border:2px dashed rgba(32,122,112,.38);border-radius:10px;padding:20px;text-align:center;margin-bottom:18px}
-.videobox video{border-radius:6px;width:auto;max-width:100%;max-height:min(58vh,440px);margin:0 auto;background:#000}
-.vaddr{font-family:var(--f-display);font-size:clamp(24px,3.6vw,30px);line-height:1.1;margin:14px 0 2px}
-.vcap{font-size:13px;color:var(--ink-2);margin:4px 0 0}
-.videobox p{font-size:14px;color:var(--ink-2);margin:0 0 14px}
-
-.maparea{margin-top:52px;display:grid;grid-template-columns:1.35fr 1fr;gap:16px}
-@media(max-width:820px){.maparea{grid-template-columns:1fr}}
-.mapframe{border:var(--edge);border-radius:16px;overflow:hidden;background:var(--foam-2);min-height:340px}
-.mapframe iframe{width:100%;height:100%;min-height:340px;border:0;display:block}
-.addr{background:var(--night);color:var(--bone);border-radius:16px;padding:clamp(22px,3.4vw,34px);display:flex;flex-direction:column}
-.addr .eyebrow{color:var(--bone-dim)}
-.addr .street{font-family:var(--f-display);font-size:clamp(36px,5vw,52px);line-height:.95;margin:0 0 8px}
-.addr .sub{font-family:var(--f-util);font-size:13px;color:var(--bone-dim);margin:0 0 16px}
-.addr .note{font-weight:300;color:var(--bone)}
-.navs{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
-.btn-waze{background:#33CCFF;color:#06303F;box-shadow:0 6px 0 #1E93BC}
-.btn-maps{background:var(--resin);color:#fff;box-shadow:0 6px 0 #14554E}
-
-/* ---------- שאלות נפוצות ---------- */
-.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(24px,5vw,72px);align-items:start}
-@media(max-width:860px){.faq-grid{grid-template-columns:1fr}}
-.faq-grid > div:first-child{position:sticky;top:110px}
-@media(max-width:860px){.faq-grid > div:first-child{position:static}}
-.faq{border-top:2px solid var(--ink)}
-details{border-bottom:var(--edge)}
-summary{
-  cursor:pointer;list-style:none;padding:20px 0;font-family:var(--f-display);
-  font-size:clamp(26px,3.6vw,32px);display:flex;justify-content:space-between;gap:16px;align-items:center;line-height:1.05;
-}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-family:var(--f-util);font-size:24px;color:var(--resin);flex:none}
-details[open] summary::after{content:"–"}
-details p{padding-bottom:20px;margin:0;font-weight:300;max-width:64ch}
-
-/* ---------- קריאה לפעולה גדולה ---------- */
-.bigcta{text-align:center}
-.bigcta h2{font-size:clamp(64px,13vw,160px)}
-.bigcta h2 em{font-style:normal;color:var(--tape)}
-.bigcta .lead{margin:22px auto 0}
-.bigcta .hero-cta{justify-content:center}
-
-
-/* ---------- מעברי גל בין חלקים ---------- */
-.wave{display:block;line-height:0;margin:0;position:relative;z-index:1}
-.wave svg{width:100%;height:clamp(44px,7vw,96px)}
-.wave .back{animation:swell 9s ease-in-out infinite alternate}
-@keyframes swell{to{transform:translateX(-4%)}}
-
-
-/* ---------- מתג שפה + התאמות לאנגלית ---------- */
-.lang{background:transparent;color:var(--bone);border:1.5px solid rgba(243,238,226,.55);border-radius:999px;
-  padding:8px 13px;font-family:var(--f-util);font-weight:700;font-size:13px;letter-spacing:.06em;cursor:pointer;transition:background .15s,color .15s}
-.lang:hover{background:var(--bone);color:var(--night)}
-html[lang="en"]{--f-display:"Bebas Neue","Karantina",sans-serif}
-html[lang="en"] h1,html[lang="en"] h2,html[lang="en"] h3,html[lang="en"] summary{letter-spacing:.01em;line-height:.92}
-html[lang="en"] .hero h1{font-size:clamp(66px,11.5vw,150px)}
-html[lang="en"] h2{font-size:clamp(48px,8.6vw,100px)}
-html[lang="en"] .eyebrow{letter-spacing:.14em}
-html[lang="en"] nav a.new::after{content:"NEW"}
-html[dir="ltr"] .ticker-track{animation-name:tickl}
-@keyframes tickl{to{transform:translateX(-50%)}}
-@media(max-width:560px){.bar{gap:10px}nav{gap:8px}.logo{font-size:30px}.logo span{white-space:normal;max-width:150px;font-size:9.5px;letter-spacing:.1em}.lang{padding:7px 10px}.bar .btn-wa.btn-sm{padding:10px 14px;font-size:14px}}
-
-/* ---------- פוטר ---------- */
-footer{background:var(--mist);color:var(--ink);padding-block:56px 40px}
-footer .logo span{color:var(--ink-2)}
-.foot{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:32px}
-@media(max-width:760px){.foot{grid-template-columns:1fr;gap:26px}}
-.foot h4{font-family:var(--f-util);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--resin);margin:0 0 12px}
-.foot a{display:block;text-decoration:none;margin-bottom:7px;font-weight:300;color:var(--ink-2)}
-.foot a:hover{color:var(--resin)}
-.credit{margin-top:40px;padding-top:18px;border-top:1px solid rgba(34,50,47,.14);font-family:var(--f-util);font-size:12px;color:var(--rail);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-
-/* ---------- בוט צף ---------- */
-.fab{
-  position:fixed;inset-inline-start:20px;bottom:20px;z-index:60;
-  width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;
-  background:var(--tape);color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.3);
-  display:grid;place-items:center;transition:transform .18s;
-}
-.fab:hover{transform:scale(1.06)}
-.fab svg{width:28px;height:28px;fill:currentColor}
-.fab .dot{position:absolute;top:2px;inset-inline-end:2px;width:14px;height:14px;border-radius:50%;background:var(--alert);border:2px solid var(--tape)}
-
-.botwin{
-  position:fixed;inset-inline-start:20px;bottom:94px;z-index:61;width:min(370px,calc(100vw - 40px));
-  max-height:min(620px,calc(100vh - 130px));background:var(--shell);border:var(--edge);border-radius:14px;
-  box-shadow:0 22px 50px rgba(34,50,47,.22);display:none;flex-direction:column;overflow:hidden;
-}
-.botwin.open{display:flex}
-.bot-head{background:var(--night);color:var(--bone);padding:14px 16px;display:flex;align-items:center;gap:12px}
-.bot-head .av{width:40px;height:40px;border-radius:50%;background:var(--tape);display:grid;place-items:center;font-family:var(--f-display);font-size:24px;color:var(--ink);flex:none}
-.bot-head b{display:block;font-size:16px;line-height:1.2}
-.bot-head small{font-size:12px;opacity:.75;font-family:var(--f-util)}
-.bot-head button{margin-inline-start:auto;background:none;border:0;color:inherit;font-size:26px;line-height:1;cursor:pointer;opacity:.75}
-.bot-head button:hover{opacity:1}
-.bot-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--foam)}
-.msg{max-width:88%;padding:11px 14px;border-radius:14px;font-size:15px;line-height:1.55;white-space:pre-line}
-.msg.bot{background:#fff;border:var(--edge);border-start-start-radius:4px;align-self:flex-start}
-.msg.me{background:var(--resin);color:#fff;border-start-end-radius:4px;align-self:flex-end}
-.bot-quick{padding:10px 12px 14px;border-top:var(--edge);display:flex;flex-wrap:wrap;gap:7px;background:var(--shell)}
-.qr{border:1.5px solid var(--resin);color:var(--resin);background:transparent;border-radius:999px;padding:7px 13px;font-size:14px;font-weight:600;cursor:pointer}
-.qr:hover{background:var(--resin);color:#fff}
-.qr.go{background:#1FA855;border-color:#1FA855;color:#fff}
-</style>
+<!-- נתונים מובנים למנועי חיפוש (בלוק מידע, לא קוד שרץ) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -430,7 +69,7 @@ footer .logo span{color:var(--ink-2)}
 <body>
 <a data-i18n="k0" class="skip" href="#main">דילוג לתוכן המרכזי</a>
 
-<div id="setup">חסר מספר WhatsApp — עדכנו את <code>CONFIG.phone</code> בקובץ (בפורמט 9725XXXXXXXX) כדי להפעיל את כל הכפתורים.</div>
+<div id="setup" hidden>חסר מספר WhatsApp — עדכנו את <code>CONFIG.phone</code> בקובץ (בפורמט 9725XXXXXXXX) כדי להפעיל את כל הכפתורים.</div>
 
 <header>
   <div class="wrap bar">
@@ -495,7 +134,7 @@ footer .logo span{color:var(--ink-2)}
         <p data-i18n="k27" class="eyebrow">מה נכנס לסדנה</p>
         <h2 data-i18n="k28">כמעט כל שבר<br>אפשר לתקן.</h2>
       </div>
-      <p data-i18n="k29" class="lead" style="margin:0;max-width:40ch">מפיצוץ קטן שספג מים ועד גלשן שנשבר לשניים. השאלה היא כמה עבודה, אילו חומרים, וכמה זמן הוא צריך להישאר אצלי.</p>
+      <p data-i18n="k29" class="lead">מפיצוץ קטן שספג מים ועד גלשן שנשבר לשניים. השאלה היא כמה עבודה, אילו חומרים, וכמה זמן הוא צריך להישאר אצלי.</p>
     </div>
     <div class="svc-list">
       <article class="svc rv"><span class="n">01</span><h3 data-i18n="k30">דינגים ופיצוצים</h3><p data-i18n="k31">ניקוי, ייבוש, מילוי קצף וגלאס. הגלשן חוזר אטום וחזק מקודם באזור התיקון.</p><span data-i18n="k32" class="tag">הכי נפוץ</span></article>
@@ -508,7 +147,7 @@ footer .logo span{color:var(--ink-2)}
   </div>
 </section>
 
-<div class="wave" aria-hidden="true" style="background:var(--shell)"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--night)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--night)"/></svg></div>
+<div class="wave wave-on-shell" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--night)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--night)"/></svg></div>
 <!-- ================= מהסדנה ================= -->
 <section class="dark" id="work">
   <div class="wrap">
@@ -517,7 +156,7 @@ footer .logo span{color:var(--ink-2)}
         <p data-i18n="k3" class="eyebrow">מהסדנה</p>
         <h2 data-i18n="k46">ככה זה נראה<br>מבפנים.</h2>
       </div>
-      <p data-i18n="k47" class="lead" style="margin:0;max-width:36ch">קטעים קצרים מהעבודה השוטפת — לפני הפוליש, בלי פילטרים.</p>
+      <p data-i18n="k47" class="lead lead-narrow">קטעים קצרים מהעבודה השוטפת — לפני הפוליש, בלי פילטרים.</p>
     </div>
     <div class="reels">
       <figure class="reel rv">
@@ -540,7 +179,7 @@ footer .logo span{color:var(--ink-2)}
   </div>
 </section>
 
-<div class="wave" aria-hidden="true" style="background:var(--night)"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,70 C220,30 460,20 700,50 C940,80 1180,90 1440,40 L1440,100 L0,100 Z" fill="var(--shell)" opacity=".45"/><path d="M0,35 C240,95 480,95 720,55 C960,15 1200,10 1440,60 L1440,100 L0,100 Z" fill="var(--shell)"/></svg></div>
+<div class="wave wave-on-night" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,70 C220,30 460,20 700,50 C940,80 1180,90 1440,40 L1440,100 L0,100 Z" fill="var(--shell)" opacity=".45"/><path d="M0,35 C240,95 480,95 720,55 C960,15 1200,10 1440,60 L1440,100 L0,100 Z" fill="var(--shell)"/></svg></div>
 <!-- ================= ערכת תיקון עצמי ================= -->
 <section class="kit" id="kit">
   <div class="wrap">
@@ -549,24 +188,23 @@ footer .logo span{color:var(--ink-2)}
         <p data-i18n="k52" class="eyebrow">חדש מהסדנה</p>
         <h2 data-i18n="k53">דינג קטן?<br>תקנו בעצמכם.</h2>
       </div>
-      <p data-i18n="k54" class="lead" style="margin:0;max-width:40ch">ערכת תיקון מהיר בפח קטן שנכנס לתיק — כדי שדינג קטן לא יעצור לכם את העונה.</p>
+      <p data-i18n="k54" class="lead">ערכת תיקון מהיר בפח קטן שנכנס לתיק — כדי שדינג קטן לא יעצור לכם את העונה.</p>
     </div>
 
     <div class="kit-grid">
       <div class="kit-visual rv">
         <span class="tag-tape">POLY &amp; EPOXY</span>
         <img src="ding-aid.jpg" alt="ערכת DING-AID — פח עם מדבקות שקופות ושרף Fiber-Fill לתיקון מהיר של דינגים קטנים" width="1100" height="794">
-        <div data-i18n="k55" class="kit-badge">מוכנה<br>לים</div>
       </div>
 
       <div class="kit-info rv">
-        <a class="brandlink" href="https://dingaid.shop/" target="_blank" rel="noopener">
+        <a class="brandlink" data-link="shop" href="https://dingaid.shop/" target="_blank" rel="noopener">
           <svg class="da-logo" viewBox="0 0 100 60" aria-hidden="true"><ellipse cx="50" cy="30" rx="46" ry="26" fill="#EDE6DC" stroke="#14182E" stroke-width="3"/><path d="M6 30H94" stroke="#14182E" stroke-width="2.6"/><path d="M44 12C58 14 62 24 62 30S58 46 44 48Z" fill="#14182E"/></svg>
           <span>DING-AID · dingaid.shop ↗</span>
         </a>
         <h3 data-i18n="k130" id="kitName">ערכת תיקון עצמי</h3>
         <div class="price"><b id="kitPrice">—</b><small id="kitPriceNote"></small></div>
-        <p data-i18n="k56" style="font-weight:300;color:var(--ink-2);margin-top:10px">לדינגים קטנים, סדקים וחריצים בגלאס. מתקנים בבית, מחכים שיתייבש — וחוזרים למים.</p>
+        <p data-i18n="k56" class="kit-desc">לדינגים קטנים, סדקים וחריצים בגלאס. מתקנים בבית, מחכים שיתייבש — וחוזרים למים.</p>
 
         <p class="compat" data-i18n="kcompat"><b>מתאימה גם לפוליאסטר וגם לאפוקסי</b> — לפי האריזה (POLY &amp; EPOXY). לא בטוחים שהנזק מתאים? <a data-wa="kitwhich">שלחו לי תמונה</a>.</p>
 
@@ -574,7 +212,7 @@ footer .logo span{color:var(--ink-2)}
         <ul class="inbox" id="kitContents"></ul>
 
         <div class="kit-cta">
-          <a class="btn btn-tape" id="kitOrder" href="https://dingaid.shop/" target="_blank" rel="noopener">לרכישה באתר DING-AID ↗</a>
+          <a class="btn btn-tape" id="kitOrder" data-link="shop" href="https://dingaid.shop/" target="_blank" rel="noopener">לרכישה באתר DING-AID ↗</a>
           <a data-i18n="k62" class="btn btn-ghost" href="#diy">מתי לא לתקן לבד?</a>
         </div>
         <p data-i18n="k63" class="safety">עובדים עם כפפות, באוויר פתוח ורחוק מילדים. שרפים ומקשים מסוכנים למגע ולנשימה.</p>
@@ -607,7 +245,7 @@ footer .logo span{color:var(--ink-2)}
   </div>
 </section>
 
-<div class="wave" aria-hidden="true" style="background:var(--shell)"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--mist)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--mist)"/></svg></div>
+<div class="wave wave-on-shell" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--mist)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--mist)"/></svg></div>
 <!-- ================= איך זה עובד ================= -->
 <section class="band-mist" id="how">
   <div class="wrap">
@@ -634,19 +272,19 @@ footer .logo span{color:var(--ink-2)}
     <div class="maparea rv">
       <div class="mapframe" id="mapframe">
         <iframe title="מפת הגעה לסדנה בכפר ויתקין" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"
-                src="https://www.google.com/maps?q=32.37746,34.878309&amp;hl=he&amp;z=17&amp;output=embed"
-                onerror="document.getElementById('mapfallback').hidden=false"></iframe>
-        <p data-i18n="k87" id="mapfallback" hidden style="padding:18px;margin:0;font-weight:300">לא הצלחנו לטעון את המפה. השתמשו בכפתורי הניווט שליד הכתובת.</p>
+                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                src="https://www.google.com/maps?q=32.37746,34.878309&amp;hl=he&amp;z=17&amp;output=embed"></iframe>
+        <p data-i18n="k87" id="mapfallback" class="map-fallback" hidden>לא הצלחנו לטעון את המפה. השתמשו בכפתורי הניווט שליד הכתובת.</p>
       </div>
       <div class="addr">
-        <p data-i18n="k88" class="eyebrow" style="margin-bottom:8px">הכתובת</p>
+        <p data-i18n="k88" class="eyebrow">הכתובת</p>
         <p data-i18n="k89" class="street">כביש עוקף דרום<br>כפר ויתקין</p>
         <p data-i18n="k90" class="sub">הפין המדויק נפתח בכפתורי הניווט</p>
-        <noscript><p style="font-weight:300">המפה דורשת JavaScript — השתמשו בכפתורי הניווט למטה.</p></noscript>
+        <noscript><p>המפה דורשת JavaScript — השתמשו בכפתורי הניווט למטה.</p></noscript>
         <p data-i18n="k91" class="note">הגעה בתיאום מראש בלבד. אם אלון לא בסדנה — משאירים את הגלשן בכניסה, בדיוק במקום שמופיע בסרטון שהוא שולח ב-WhatsApp.</p>
         <div class="navs">
-          <a data-i18n="k92" class="btn btn-waze btn-sm" href="https://waze.com/ul/hsvbb1wjs7" target="_blank" rel="noopener">ניווט ב־Waze</a>
-          <a class="btn btn-maps btn-sm" href="https://maps.app.goo.gl/7fCY8iCD42zbD3Uk7" target="_blank" rel="noopener">Google Maps</a>
+          <a data-i18n="k92" class="btn btn-waze btn-sm" data-link="waze" href="https://waze.com/ul/hsvbb1wjs7" target="_blank" rel="noopener">ניווט ב־Waze</a>
+          <a class="btn btn-maps btn-sm" data-link="maps" href="https://maps.app.goo.gl/7fCY8iCD42zbD3Uk7" target="_blank" rel="noopener">Google Maps</a>
           <a data-i18n="k93" class="btn btn-ghost btn-sm" data-wa="coming">תיאום הגעה</a>
         </div>
       </div>
@@ -686,7 +324,7 @@ footer .logo span{color:var(--ink-2)}
     <div class="rv">
       <p data-i18n="k106" class="eyebrow">לפני שאתם כותבים</p>
       <h2 data-i18n="k107">שאלות<br>שחוזרות</h2>
-      <p data-i18n="k108" class="lead" style="margin-top:18px">לא מצאתם תשובה? הבוט בפינה עונה על הבסיס, ואלון — ב-WhatsApp.</p>
+      <p data-i18n="k108" class="lead">לא מצאתם תשובה? הבוט בפינה עונה על הבסיס, ואלון — ב-WhatsApp.</p>
     </div>
     <div class="faq rv">
       <details><summary data-i18n="k109">כמה עולה תיקון?</summary><p data-i18n="k110">אין מחירון אחיד, כי המחיר נגזר מכמות העבודה והחומרים: תיקון רייל, למשל, חייב להיות מדויק בשני הצדדים, והחלפת בית חרב מוסיפה חלק מעבר לעבודה. לכן אני מתמחר רק אחרי שאני רואה 3–5 תמונות של הנזק. שלחו ב-WhatsApp ואחזור עם מספר.</p></details>
@@ -702,11 +340,11 @@ footer .logo span{color:var(--ink-2)}
   </div>
 </section>
 
-<div class="wave" aria-hidden="true" style="background:var(--shell)"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,70 C220,30 460,20 700,50 C940,80 1180,90 1440,40 L1440,100 L0,100 Z" fill="var(--night)" opacity=".45"/><path d="M0,35 C240,95 480,95 720,55 C960,15 1200,10 1440,60 L1440,100 L0,100 Z" fill="var(--night)"/></svg></div>
+<div class="wave wave-on-shell" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,70 C220,30 460,20 700,50 C940,80 1180,90 1440,40 L1440,100 L0,100 Z" fill="var(--night)" opacity=".45"/><path d="M0,35 C240,95 480,95 720,55 C960,15 1200,10 1440,60 L1440,100 L0,100 Z" fill="var(--night)"/></svg></div>
 <!-- ================= קריאה לפעולה ================= -->
 <section class="dark bigcta">
   <div class="wrap rv">
-    <p data-i18n="k127" class="eyebrow" style="justify-content:center">הים לא מחכה</p>
+    <p data-i18n="k127" class="eyebrow">הים לא מחכה</p>
     <h2 data-i18n="k128">בואו נחזיר אותו<br><em>למים.</em></h2>
     <p data-i18n="k129" class="lead">3–5 תמונות ב-WhatsApp, והערכת מחיר חוזרת אליכם.</p>
     <div class="hero-cta">
@@ -718,19 +356,19 @@ footer .logo span{color:var(--ink-2)}
 
 </main>
 
-<div class="wave" aria-hidden="true" style="background:var(--night)"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--mist)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--mist)"/></svg></div>
+<div class="wave wave-on-night" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path class="back" d="M0,40 C200,85 400,90 620,55 C840,20 1040,15 1240,50 C1340,68 1400,70 1440,62 L1440,100 L0,100 Z" fill="var(--mist)" opacity=".45"/><path d="M0,60 C180,10 360,10 540,50 C720,90 900,95 1080,55 C1260,15 1350,25 1440,45 L1440,100 L0,100 Z" fill="var(--mist)"/></svg></div>
 <footer>
   <div class="wrap">
     <div class="foot">
       <div>
-        <div data-i18n="k131" class="logo" style="font-size:34px">אלון להק<span>סדנה לתיקוני גלשנים · כפר ויתקין</span></div>
-        <p data-i18n="k132" style="font-weight:300;color:var(--ink-2);margin-top:14px;max-width:34ch">תיקוני גלשנים, בתי חרב, שברים, צביעה והתאמת גוונים — לגלשני גלים, סאפ, קייט ורוח. וערכות תיקון עצמי לדינגים קטנים.</p>
+        <div data-i18n="k131" class="logo">אלון להק<span>סדנה לתיקוני גלשנים · כפר ויתקין</span></div>
+        <p data-i18n="k132" class="foot-about">תיקוני גלשנים, בתי חרב, שברים, צביעה והתאמת גוונים — לגלשני גלים, סאפ, קייט ורוח. וערכות תיקון עצמי לדינגים קטנים.</p>
       </div>
       <div>
         <h4 data-i18n="k133">יצירת קשר</h4>
         <a data-wa="general">WhatsApp</a>
         <a id="telLink" href="#">טלפון</a>
-        <a data-i18n="k134" href="https://maps.app.goo.gl/7fCY8iCD42zbD3Uk7" target="_blank" rel="noopener">כביש עוקף דרום, כפר ויתקין</a>
+        <a data-i18n="k134" data-link="maps" href="https://maps.app.goo.gl/7fCY8iCD42zbD3Uk7" target="_blank" rel="noopener">כביש עוקף דרום, כפר ויתקין</a>
         <a data-i18n="k135" href="#workshop">הגעה לסדנה</a>
         <a data-i18n="k130" href="#kit">ערכת תיקון עצמי</a>
       </div>
@@ -790,8 +428,8 @@ footer .logo span{color:var(--ink-2)}
 </footer>
 
 <!-- ================= בוט ================= -->
-<button class="fab" id="fab" aria-label="פתיחת צ׳אט עם עוזר הסדנה" aria-expanded="false" aria-controls="botwin">
-  <svg viewBox="0 0 24 24"><path d="M12 3C6.9 3 2.8 6.4 2.8 10.6c0 2.4 1.3 4.5 3.4 5.9-.1.9-.6 2.2-1.6 3.4 0 0 2.7-.3 4.6-1.9.9.2 1.8.3 2.8.3 5.1 0 9.2-3.4 9.2-7.7S17.1 3 12 3zm-4 9a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 8 12zm4 0a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 12 12zm4 0a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 16 12z"/></svg>
+<button class="fab" id="fab" type="button" aria-label="פתיחת צ׳אט עם עוזר הסדנה" aria-expanded="false" aria-controls="botwin">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.9 3 2.8 6.4 2.8 10.6c0 2.4 1.3 4.5 3.4 5.9-.1.9-.6 2.2-1.6 3.4 0 0 2.7-.3 4.6-1.9.9.2 1.8.3 2.8.3 5.1 0 9.2-3.4 9.2-7.7S17.1 3 12 3zm-4 9a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 8 12zm4 0a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 12 12zm4 0a1.3 1.3 0 1 1 0-2.6A1.3 1.3 0 0 1 16 12z"/></svg>
   <span class="dot" id="fabdot"></span>
 </button>
 
@@ -799,578 +437,15 @@ footer .logo span{color:var(--ink-2)}
   <div class="bot-head">
     <div class="av">א</div>
     <div><b data-i18n="k169">עוזר הסדנה</b><small data-i18n="k170">תשובות ראשונות · 24/7</small></div>
-    <button id="botclose" aria-label="סגירה">×</button>
+    <button id="botclose" type="button" aria-label="סגירה">×</button>
   </div>
   <div class="bot-body" id="botbody" role="log" aria-live="polite"></div>
   <div class="bot-quick" id="botquick"></div>
 </div>
 
-<script>
-/* ============================================================
-   1. הגדרות — כל מה שצריך לעדכן נמצא כאן
-   ============================================================ */
-const CONFIG = {
-  phone: "972544633386",            // ← מספר ה-WhatsApp בפורמט בינלאומי, בלי + ובלי 0 מוביל
-  displayPhone: "054-463-3386",     // ← איך המספר יוצג באתר
-  dropoffAddress: "",               // ← כתובת ההשארה. ריק = לא מוצגת באתר (נשלחת ללקוח ב-WhatsApp בלבד)
-  videoUrl: "",                     // ← שם קובץ mp4 שיושב לצד index.html. ריק = מוצג כפתור "שלחו לי את הסרטון"
-  address: "כביש עוקף דרום, כפר ויתקין",
-  businessName: "אלון להק — סדנה לתיקוני גלשנים",
-  businessId: "",                   // ← מספר עוסק מורשה/פטור. ריק = לא מוצג
-  legalUpdated: "אוגוסט 2026",       // ← תאריך עדכון ההצהרות המשפטיות
-  legalUpdatedEn: "August 2026",     // ← אותו תאריך, באנגלית
-  mapsUrl: "https://maps.app.goo.gl/7fCY8iCD42zbD3Uk7",   // ← הפין של אלון ב-Google Maps
-  wazeUrl: "https://waze.com/ul/hsvbb1wjs7",              // ← הפין של אלון ב-Waze
-  // ← מחירים: כרגע כבויים. הבוט אומר שאלון מתמחר לפי תמונות, בלי מספרים.
-  //   כדי להפעיל, החליפו את prices: null בבלוק הזה עם המחירים האמיתיים:
-  //   prices: { small: "₪150–₪300", medium: "₪300–₪600", big: "₪600 ומעלה" }
-  prices: null,
-  // ← תנאי אחסון: כרגע מוצג בלי מספרים. כשאלון יחליט, החליפו ל:
-  //   storage: { freeDays: 14, fee: "₪10 ליום" }
-  storage: null,
-  // ← ערכת תיקון עצמי. price: null = מוצג "מחיר ב-WhatsApp".
-  //   כשיש מחיר, למשל: price: "₪149"
-  //   contents: עדכנו לפי מה שבאמת נמצא בערכה
-  kit: {
-    name: "DING-AID",
-    shopUrl: "https://dingaid.shop/",   // ← לאן מפנים לרכישת הערכה
-    price: null,
-    priceNote: "ערכת תיקון מהיר לדינגים קטנים · רכישה באתר dingaid.shop",
-    contents: [
-      "מדבקות DING-AID שקופות",
-      "שרף Fiber-Fill"
-    ]
-  },
-  // ← אותה ערכה באנגלית (המחיר נלקח מ-kit.price למעלה)
-  kitEn: {
-    name: "DING-AID",
-    priceNote: "A speed repair kit for minor dings · Buy at dingaid.shop",
-    contents: [
-      "Clear DING-AID stickers",
-      "Fiber-fill resin"
-    ]
-  }
-};
-
-/* ============================================================
-   2. בניית קישורי WhatsApp
-   ============================================================ */
-const PHONE_UNSET = CONFIG.phone === "972500000000";
-if (PHONE_UNSET) document.getElementById('setup').style.display = 'block';
-
-function waLink(text){
-  return "https://wa.me/" + CONFIG.phone + "?text=" + encodeURIComponent(text);
-}
-
-/* תרגומים לאנגלית — מפתח לכל אלמנט עם data-i18n */
-const I18N_EN = {
-"kcompat": "<b>Works on both polyester and epoxy boards</b> — per the packaging (POLY &amp; EPOXY). Not sure your damage fits? <a data-wa=\"kitwhich\">Send me a photo</a>.",
-"k0": "Skip to main content",
-"k1": "Alon Lahack<span>SURFBOARD REPAIR · KFAR VITKIN, ISRAEL</span>",
-"k2": "Repairs",
-"k3": "Workshop",
-"k4": "Repair Kit",
-"k5": "Visit",
-"k6": "20+ years of experience · Kfar Vitkin, Israel",
-"k7": "<span class=\"ln\">Broke</span><span class=\"ln\">your board?</span><em>We'll fix it.</em>",
-"k8": "Dings, rails, fin boxes, snapped boards and yellowing. Send 3–5 photos of the damage on WhatsApp — and get a price and turnaround estimate.",
-"k9": "Send photos on WhatsApp",
-"k10": "Small ding? Fix it yourself",
-"k11": "Polyester &amp; epoxy",
-"k12": "Color matching &amp; paint",
-"k13": "SUP · Kite · Windsurf",
-"k14": "By appointment",
-"k15": "From ding to done",
-"k16": "Before",
-"k17": "Dings",
-"k18": "Rails",
-"k19": "Fin boxes",
-"k20": "Snapped boards",
-"k21": "Paint",
-"k22": "Polish",
-"k23": "SUP",
-"k24": "Kitesurf",
-"k25": "Windsurf",
-"k26": "Repair kits",
-"k27": "What comes through the shop",
-"k28": "Almost any break<br>can be fixed.",
-"k29": "From a small ding that took on water to a board snapped in half. The question is how much work, which materials, and how long it needs to stay with me.",
-"k30": "Dings &amp; blowouts",
-"k31": "Cleaning, drying, foam fill and glassing. The board comes back sealed — and stronger than before around the repair.",
-"k32": "Most common",
-"k33": "Precise work on both sides so the rails stay balanced.",
-"k34": "Fine work",
-"k35": "Replacing ripped-out plugs, carbon reinforcement and matching your board's existing fin system.",
-"k36": "Parts",
-"k37": "Snapped boards",
-"k38": "Rejoining, cross-reinforcement, restoring the shape and polishing. Yes, even if it broke in two.",
-"k39": "Full break",
-"k40": "Paint &amp; color match",
-"k41": "Color under the glass, matched to the original, then polished. Smooth — and no visible repair.",
-"k42": "Finish",
-"k43": "SUP, kite &amp; windsurf",
-"k44": "The same work on SUPs, kiteboards and windsurf boards.",
-"k45": "Not just surf",
-"k46": "This is what it<br>looks like inside.",
-"k47": "Short clips from everyday work — before the polish, no filters.",
-"k48": "<b>Finish &amp; polish</b>A board after glassing, before the final polish.",
-"k49": "<b>Carbon reinforcement</b>Work on the tail and pad area.",
-"k50": "<b>Paint &amp; color</b>A board on the racks after painting.",
-"k51": "More from the workshop on Instagram ↗",
-"k52": "New from the workshop",
-"k53": "Small ding?<br>Fix it yourself.",
-"k54": "A speed repair kit in a small tin that fits in your bag — so a small ding doesn't stop your season.",
-"k55": "Ready<br>to surf",
-"k56": "For small dings, cracks and nicks in the glass. Fix it at home, let it cure — and get back in the water.",
-"k57": "Choose a kit for your board",
-"k58": "<b>Polyester</b><span>For classic PU boards (polyurethane foam)</span>",
-"k59": "<b>Epoxy</b><span>For EPS / epoxy boards, SUP and kite</span>",
-"k60": "Not sure what you have? Polyester resin can melt EPS foam — <a data-wa=\"kitwhich\">send me a photo and I'll tell you</a>.",
-"k61": "What's in the kit",
-"k62": "When not to DIY?",
-"k63": "Wear gloves, work outdoors and keep away from kids. Resins and hardeners are hazardous to skin and lungs.",
-"k64": "Kit-friendly",
-"k65": "Fix it yourself",
-"k66": "A small ding on the deck or bottom, with no wet foam",
-"k67": "A hairline crack in the glass (pressure / stress crack)",
-"k68": "A small nick on the rail that didn't reach the foam",
-"k69": "A temporary fix before a trip, until you can get to the shop",
-"k70": "Worth bringing in",
-"k71": "Leave it to me",
-"k72": "Foam that took on water or turned dark",
-"k73": "A rail that's crushed or split along its length",
-"k74": "A fin box that's ripped out or loose",
-"k75": "A snapped board, or a crack running across the board",
-"k76": "Not sure? Send a photo",
-"k77": "From photo to water",
-"k78": "How it works",
-"k79": "Send photos on WhatsApp",
-"k80": "3–5 photos of the damage, and I'll get back to you with a price and time estimate. I can't quote without photos — every ding looks different on the inside.",
-"k81": "Bring the board to the workshop",
-"k82": "Visits are by appointment. If I'm not there, you leave the board at the house entrance — I'll send a short video showing exactly where.",
-"k83": "Get an update when it's done",
-"k84": "I'll message you on WhatsApp when the board is ready for pickup, with a photo of the finished repair. The pickup period starts from then — if you know you won't make it in time, tell me in advance and we'll agree on storage.",
-"k85": "Kfar Vitkin · By appointment only",
-"k86": "Visit the workshop",
-"k87": "We couldn't load the map. Use the navigation buttons next to the address.",
-"k88": "Address",
-"k89": "Southern Bypass Rd.<br>Kfar Vitkin",
-"k90": "The exact pin opens in the navigation buttons",
-"k91": "By appointment only. If Alon isn't at the workshop, leave the board at the entrance — exactly where it's shown in the video he sends you on WhatsApp.",
-"k92": "Navigate with Waze",
-"k93": "Arrange a visit",
-"k94": "Before you head out",
-"k95": "Always message on WhatsApp before coming — the workshop runs by appointment, not fixed hours.",
-"k96": "Bring the board without its bag, and preferably without fins.",
-"k97": "If you've already sent photos, let me know when you're coming so I'll expect you.",
-"k98": "Traveling or can't pick up soon? Let me know in advance — the workshop is small and long-term storage is charged.",
-"k99": "I'm not at the workshop? No problem.",
-"k100": "I have a short video showing how to get to the workshop and exactly where to leave your board at the house entrance. I'll send it to you on WhatsApp.",
-"k101": "Send me the video",
-"k102": "Leave the board at the house entrance, in the spot shown in the video.",
-"k103": "Attach a note with your name, phone number and what needs fixing.",
-"k104": "Send me a message that you've dropped it off — so I know it's there.",
-"k105": "I left a board at the entrance",
-"k106": "Before you message",
-"k107": "Common<br>questions",
-"k108": "Didn't find your answer? The bot in the corner covers the basics, and Alon answers on WhatsApp.",
-"k109": "How much does a repair cost?",
-"k110": "There's no fixed price list, because the price depends on the amount of work and materials: a rail repair, for example, has to be precise on both sides, and replacing a fin box adds a part on top of the labor. That's why I only quote after seeing 3–5 photos of the damage. Send them on WhatsApp and I'll get back to you with a number.",
-"k111": "How long does it take?",
-"k112": "It depends on the type of repair and how busy the workshop is — and just as much on drying. A board that took on water has to dry completely before it's sealed, or the repair won't hold. Once I see photos I'll give you a more accurate estimate, and if you have a real deadline (a flight, a contest), tell me and we'll see what's possible.",
-"k113": "My board took on water. What now?",
-"k114": "Take it out of the sun and out of the bag, lay it in the shade with the damaged side facing down so the water drains, and stop surfing it. Every extra session pushes more water in and makes the repair bigger. Don't tape over the hole and keep surfing — that's exactly what turns a small repair into a big one.",
-"k115": "Which dings can DING-AID fix?",
-"k116": "DING-AID is made for minor dings, and per the packaging it works on both polyester and epoxy boards. Waterlogged foam, crushed rails, ripped-out fin boxes or a snapped board — those are better brought to the workshop. Not sure? Send me a photo before ordering.",
-"k117": "What if I can't pick up my board when it's ready?",
-"k118": "The workshop is small, and a finished board waiting around takes the spot of a board that needs fixing. So there's a pickup period from the moment I tell you the board is ready, and storage fees apply after it. If you already know you won't be able to come — a flight, time abroad, a busy stretch — tell me before or during the repair and we'll sort it out upfront, no surprises.",
-"k119": "Do you handle insurance for boards broken on flights?",
-"k120": "I don't handle insurance claims, but I do provide photos and a detailed description of the damage and repair if the airline or insurer asks for documentation. Just let me know in advance that you need it.",
-"k121": "Can you match the original color?",
-"k122": "In most cases, yes. I paint under the glass and match colors, including restoring logos when needed, and finish with a polish. Some colors and effects are hard to reproduce 100% — we'll talk about it when I see the board.",
-"k123": "Do you also repair SUP, kite and windsurf boards?",
-"k124": "Yes. Same materials, same work. With SUPs it's especially important to deal with dings quickly, because they soak up a lot of water.",
-"k125": "Can I come without an appointment?",
-"k126": "Better not. The workshop runs by appointment and I'm not always there. Send a message before you head out — and if I'm not there, I'll send you a video showing where to leave the board.",
-"k127": "The ocean won't wait",
-"k128": "Let's get it back<br><em>in the water.</em>",
-"k129": "3–5 photos on WhatsApp, and a price estimate comes back to you.",
-"k130": "DIY repair kit",
-"k131": "Alon Lahack<span>Surfboard repair · Kfar Vitkin, Israel</span>",
-"k132": "Surfboard repairs, fin boxes, snapped boards, paint and color matching — for surfboards, SUP, kite and windsurf. Plus DIY repair kits for small dings.",
-"k133": "Contact",
-"k134": "Southern Bypass Rd., Kfar Vitkin",
-"k135": "Visit the workshop",
-"k136": "Online",
-"k137": "Facebook",
-"k138": "Instagram",
-"k139": "Accessibility statement",
-"k140": "Privacy policy",
-"k141": "Terms of use",
-"k142": "Accessibility, privacy &amp; terms <small style=\"font-weight:400\">(English translation — the Hebrew version prevails)</small>",
-"k143": "We see website accessibility as part of our service, and make an effort so that everyone can use the site independently and comfortably. The site was made accessible in accordance with Israeli Standard SI 5568, based on the W3C WCAG guidelines at level AA, and in accordance with the Equal Rights for Persons with Disabilities (Service Accessibility Adjustments) Regulations, 2013.",
-"k144": "<strong>What we've done:</strong>",
-"k145": "Full keyboard navigation, with a clear focus indicator and a skip-to-content link.",
-"k146": "Hierarchical heading structure and semantic tags, for proper screen reader support.",
-"k147": "Color contrast ratios meeting level AA, and text that can be enlarged up to 200% without loss of content.",
-"k148": "Alternative text for graphic elements, and decorative elements marked so screen readers skip them.",
-"k149": "Animations stop for anyone who has set a reduced-motion preference in their operating system.",
-"k150": "Support for right-to-left and left-to-right layout and for zooming on mobile devices.",
-"k151": "<strong>Known limitations:</strong> The embedded map is provided by Google and is outside our control; the address in text and alternative navigation buttons always appear next to it. There may be other components not yet fully accessible — we work to fix any issue brought to our attention.",
-"k152": "<strong>Accessibility coordinator:</strong> Alon Lahack. Ran into a problem, or have a suggestion? Write or call and we'll handle it promptly.",
-"k153": "This statement was last updated in <span id=\"lu1\"></span>.",
-"k154": "This policy is written in accordance with the Israeli Protection of Privacy Law, 1981 and its amendments, including Amendment 13.",
-"k155": "<strong>What information is collected:</strong> The site has no forms, requires no registration, sets no tracking cookies and runs no analytics tools. We do not collect or store personal information about visitors.",
-"k156": "<strong>Third-party services:</strong> The page loads fonts from Google Fonts and displays a map from Google Maps. In doing so, your IP address may be exposed to Google, subject to its privacy policy. Clicking WhatsApp buttons takes you to the app, and the conversation itself is subject to WhatsApp's terms and privacy policy.",
-"k157": "<strong>Information you provide:</strong> Contacting us on WhatsApp or by phone usually includes your name, phone number and photos of the board. This information is used solely for quoting, carrying out the repair and ongoing contact with you, is not shared with third parties and is not used for marketing without your consent.",
-"k158": "<strong>Your rights:</strong> You may request to review the information we hold about you, and request its correction or deletion. Such requests will be handled in accordance with the law.",
-"k159": "This policy was last updated in <span id=\"lu2\"></span>.",
-"k160": "Terms of use &amp; service",
-"k161": "The information on the site is general information only and does not constitute a binding offer. A quote is given only after reviewing photos of the damage or inspecting the board in person, and may change if additional defects are discovered during the work.",
-"k162": "Turnaround times shown on the site are estimates only and depend on the type of repair, drying time and workload.",
-"k163": "Visits to the workshop are by appointment only.",
-"k164": "Board pickup: the pickup period starts from the notice that the repair is complete. It is the customer's responsibility to collect the board on time or to arrange storage in advance; extended storage beyond the agreed period is charged.",
-"k165": "All content, text and design on the site are the property of the business owner and may not be used without permission.",
-"k166": "These terms were last updated in <span id=\"lu3\"></span>.",
-"k167": "© <span id=\"yr\"></span> Alon Lahack · All rights reserved",
-"k168": "By appointment only",
-"k169": "Workshop assistant",
-"k170": "Quick answers · 24/7"
-};
-
-/* ============================================================
-   2ב. שפות — עברית / English
-   ============================================================ */
-const LANG_KEY = 'alonlahack-lang';
-let LANG = 'he';
-try {
-  const q = new URLSearchParams(location.search).get('lang');
-  LANG = (q === 'en' || q === 'he') ? q : (localStorage.getItem(LANG_KEY) || 'he');
-} catch(e){}
-const L = () => STR[LANG];
-
-const STR = {
-  he: {
-    title: "אלון להק · סדנה לתיקוני גלשנים וערכות תיקון עצמי | כפר ויתקין",
-    legalUpdated: CONFIG.legalUpdated,
-    templates: {
-      general: "היי אלון, הגעתי דרך האתר. יש לי גלשן שצריך תיקון ואשמח להערכת מחיר. מצרף/ת תמונות של הנזק.",
-      photos:  "היי אלון, שולח/ת עכשיו 3–5 תמונות של הנזק בגלשן: כללית, מקרוב, בזווית, ואחת עם אצבע או מטבע לגודל.",
-      coming:  "היי אלון, רציתי לתאם הגעה לסדנה עם גלשן. מתי נוח לך?",
-      video:   "היי אלון, אשמח לסרטון שמראה איך מגיעים לסדנה ואיפה להשאיר את הגלשן.",
-      dropped: "היי אלון, השארתי גלשן בכניסה כמו בסרטון. השם שלי: ______ . צריך לתקן: ______ .",
-      kit:     v => "היי אלון, אשמח להזמין ערכת DING-AID לתיקון דינגים. איך מקבלים אותה?",
-      kitwhich:"היי אלון, אני שוקל/ת ערכת DING-AID ולא בטוח/ה שהנזק מתאים לתיקון עצמי. מצרף/ת תמונה."
-    },
-    variants: { poly: "פוליאסטר", epoxy: "אפוקסי" },
-    kitName: CONFIG.kit.name,
-    kitPriceNone: "המחיר באתר",
-    kitPriceNote: CONFIG.kit.priceNote,
-    kitContents: CONFIG.kit.contents,
-    kitOrder: v => "לרכישה באתר DING-AID ↗",
-    bizid: id => CONFIG.businessName + ' · ע.מ/ח.פ ' + id,
-    vcap: "הסרטון מראה איפה בדיוק להשאיר את הגלשן כשאלון לא בסדנה.",
-    langBtn: "EN", langLabel: "Switch to English",
-    attrs: {
-      fab: "פתיחת צ׳אט עם עוזר הסדנה", botwin: "עוזר הסדנה", botclose: "סגירה", nav: "תפריט ראשי",
-      before: "גלשן עם פיצוץ גדול בחרטום לפני התיקון", hero: "גלשן שבור בסדנה, מהנזק ועד התיקון",
-      map: "מפת הגעה לסדנה בכפר ויתקין", r1: "גלשן בסדנה אחרי גלאס", r2: "עבודת קרבון על זנב הגלשן", r3: "גלשן צבוע על חמורי עבודה בסדנה"
-    },
-    bot: {
-      other: "שאלה אחרת",
-      unknown: "על זה אני לא יודע לענות — עדיף לשאול את אלון ישירות ב-WhatsApp.",
-      opening: () => "פותח WhatsApp עם הודעה מוכנה. אם זה לא נפתח — אפשר לכתוב ישירות ל" + CONFIG.displayPhone + ".",
-      mapMsg: () => "הנה המפה וכפתורי הניווט. הכתובת: " + CONFIG.address + ".",
-      actions: { "דבר עם אלון":"general", "שלחו לי את הסרטון":"video", "תיאום הגעה":"coming" },
-      toMap: "פתח לי את המפה", toKit: "לראות את הערכה", toShop: "לרכישה באתר", shopMsg: "פותח את אתר DING-AID: dingaid.shop",
-      flow: () => {
-        const P = CONFIG.prices, ST = CONFIG.storage;
-        return {
-          start: { msg: "היי! אני העוזר של הסדנה 🤙\nאני יכול לענות על השאלות הנפוצות, ואלון עצמו חוזר ב-WhatsApp.\nמה מעניין אותך?",
-            quick: ["כמה עולה תיקון?","כמה זמן זה לוקח?","ערכת תיקון עצמי","איך מגיעים לסדנה?","מתי לאסוף את הגלשן?","נכנסו מים לגלשן","איך לצלם את הנזק?"] },
-          "כמה עולה תיקון?": { msg: "אין מחירון קבוע — המחיר תלוי בגודל הנזק, במיקום שלו ובחומרים.\n" +
-            (P ? "טווחים משוערים:\n• דינג קטן או סדק: " + P.small + "\n• פיצוץ עם קצף חשוף או תיקון רייל: " + P.medium + "\n• שבר מלא, בית חרב או צביעה: " + P.big + "\nהמחיר הסופי נקבע רק אחרי שאלון רואה תמונות." : "אלון מתמחר אחרי שהוא רואה תמונות של הנזק."),
-            quick: ["איך לצלם את הנזק?","דבר עם אלון"] },
-          "ערכת תיקון עצמי": { msg: "DING-AID — ערכת תיקון מהיר לדינגים קטנים: מדבקות שקופות ושרף Fiber-Fill.\nלפי האריזה היא מתאימה גם לגלשני פוליאסטר וגם לאפוקסי.\n" +
-            (CONFIG.kit.price ? "מחיר: " + CONFIG.kit.price + "\n" : "") + "קצף שספג מים, רייל מעוך, בית חרב או שבר — עדיף להביא לסדנה.",
-            quick: ["לרכישה באתר","לראות את הערכה","דבר עם אלון"] },
-          "כמה זמן זה לוקח?": { msg: "תלוי בסוג התיקון ובעומס בסדנה.\nהדבר שהכי מאריך זמן הוא ייבוש: גלשן שספג מים חייב להתייבש לגמרי לפני שסוגרים אותו, אחרת התיקון לא יחזיק.\nיש לכם דדליין אמיתי כמו טיסה או תחרות? כתבו את זה לאלון בהודעה, הוא ינסה לסדר.",
-            quick: ["כמה עולה תיקון?","דבר עם אלון"] },
-          "איך מגיעים לסדנה?": { msg: "הסדנה בכפר ויתקין, בכביש עוקף דרום. ההגעה בתיאום מראש — תמיד כדאי לכתוב לפני שיוצאים.\nיש מפה וכפתורי ניווט ל-Waze ול-Google Maps בהמשך העמוד, בקטע ״מגיעים לסדנה״.\nואם אלון לא בסדנה, משאירים את הגלשן בכניסה לבית — הוא שולח ב-WhatsApp סרטון קצר שמראה בדיוק איפה.",
-            quick: ["פתח לי את המפה","שלחו לי את הסרטון","תיאום הגעה","דבר עם אלון"] },
-          "נכנסו מים לגלשן": { msg: "עצרו את הגלישה איתו — כל גלישה נוספת דוחפת עוד מים פנימה והופכת תיקון קטן לגדול.\nמה כן לעשות עכשיו:\n• מוציאים מהנרתיק ומהשמש\n• מניחים בצל כשהצד השבור כלפי מטה, שהמים יֵצאו\n• לא סוגרים את החור בסקוץ׳ ולא ממשיכים לגלוש\nושולחים תמונות לאלון בהקדם.",
-            quick: ["איך לצלם את הנזק?","דבר עם אלון"] },
-          "איך לצלם את הנזק?": { msg: "3–5 תמונות באור יום, בלי פלאש, כשהגלשן יבש ונקי מווקס באזור הפגיעה:\n1. תמונה כללית של כל הגלשן\n2. מקרוב על הנזק, ממוקד\n3. מהצד בזווית — כדי לראות עומק\n4. עם אצבע או מטבע ליד, לקנה מידה\n5. ואם יש עוד מוקדי נזק — תמונה לכל אחד",
-            quick: ["דבר עם אלון"] },
-          "מתי לאסוף את הגלשן?": { msg: "אלון מודיע ב-WhatsApp ברגע שהגלשן מוכן, ומשם מתחילה תקופת האיסוף.\nהסדנה קטנה, וגלשן מוכן שממתין תופס את המקום של גלשן שצריך תיקון — ולכן מעבר לתקופה הזו נגבים דמי אחסון." +
-            (ST ? "\nנכון להיום: " + ST.freeDays + " ימים ראשונים ללא תשלום, ואחר כך " + ST.fee + "." : "") +
-            "\nיודעים מראש שלא תוכלו להגיע בזמן? כתבו לאלון עוד לפני התיקון או תוך כדי, ותסכמו איתו מראש.",
-            quick: ["תיאום הגעה","דבר עם אלון"] }
-        };
-      }
-    }
-  },
-  en: {
-    title: "Alon Lahack · Surfboard Repair Workshop & DIY Repair Kits | Kfar Vitkin, Israel",
-    legalUpdated: CONFIG.legalUpdatedEn,
-    templates: {
-      general: "Hi Alon, I found you through the website. I have a board that needs a repair and would love a price estimate. Attaching photos of the damage.",
-      photos:  "Hi Alon, sending 3–5 photos of the damage now: full board, close-up, from an angle, and one with a finger or coin for scale.",
-      coming:  "Hi Alon, I'd like to arrange a time to bring a board to the workshop. When works for you?",
-      video:   "Hi Alon, could you send me the video showing how to get to the workshop and where to leave the board?",
-      dropped: "Hi Alon, I left a board at the entrance like in the video. My name: ______ . What needs fixing: ______ .",
-      kit:     v => "Hi Alon, I'd like to order a DING-AID ding repair kit. How do I get it?",
-      kitwhich:"Hi Alon, I'm thinking about a DING-AID kit but not sure my damage is a DIY fix. Attaching a photo."
-    },
-    variants: { poly: "Polyester", epoxy: "Epoxy" },
-    kitName: CONFIG.kitEn.name,
-    kitPriceNone: "See price online",
-    kitPriceNote: CONFIG.kitEn.priceNote,
-    kitContents: CONFIG.kitEn.contents,
-    kitOrder: v => "Buy on the DING-AID site ↗",
-    bizid: id => "Alon Lahack — Surfboard Repair · Business ID " + id,
-    vcap: "The video shows exactly where to leave your board when Alon isn't at the workshop.",
-    langBtn: "עב", langLabel: "מעבר לעברית",
-    attrs: {
-      fab: "Open chat with the workshop assistant", botwin: "Workshop assistant", botclose: "Close", nav: "Main menu",
-      before: "Surfboard with a large blown-out nose before the repair", hero: "Broken board in the workshop, from damage to repair",
-      map: "Map to the workshop in Kfar Vitkin", r1: "Board in the workshop after glassing", r2: "Carbon work on the tail of a board", r3: "Painted board on workshop racks"
-    },
-    bot: {
-      other: "Something else",
-      unknown: "I can't answer that one — best to ask Alon directly on WhatsApp.",
-      opening: () => "Opening WhatsApp with a ready-made message. If it doesn't open, you can message " + CONFIG.displayPhone + " directly (+972 from abroad).",
-      mapMsg: () => "Here's the map and navigation buttons. Address: Southern Bypass Road, Kfar Vitkin.",
-      actions: { "Talk to Alon":"general", "Send me the video":"video", "Arrange a visit":"coming" },
-      toMap: "Show me the map", toKit: "See the kit", toShop: "Buy online", shopMsg: "Opening the DING-AID site: dingaid.shop",
-      flow: () => {
-        const P = CONFIG.prices, ST = CONFIG.storage;
-        return {
-          start: { msg: "Hi! I'm the workshop assistant 🤙\nI can answer the common questions — Alon himself replies on WhatsApp.\nWhat would you like to know?",
-            quick: ["How much does a repair cost?","How long does it take?","DIY repair kit","How do I get to the workshop?","When do I pick up my board?","My board took on water","How should I photograph the damage?"] },
-          "How much does a repair cost?": { msg: "There's no fixed price list — the price depends on the size of the damage, where it is, and the materials.\n" +
-            (P ? "Rough ranges:\n• Small ding or crack: " + P.small + "\n• Blowout with exposed foam or rail repair: " + P.medium + "\n• Snapped board, fin box or paint: " + P.big + "\nThe final price is set only after Alon sees photos." : "Alon quotes after he sees photos of the damage."),
-            quick: ["How should I photograph the damage?","Talk to Alon"] },
-          "DIY repair kit": { msg: "DING-AID — a speed repair kit for minor dings: clear stickers and fiber-fill resin.\nPer the packaging, it works on both polyester and epoxy boards.\n" +
-            (CONFIG.kit.price ? "Price: " + CONFIG.kit.price + "\n" : "") + "Waterlogged foam, crushed rails, fin boxes or a snapped board — better bring it to the workshop.",
-            quick: ["Buy online","See the kit","Talk to Alon"] },
-          "How long does it take?": { msg: "Depends on the type of repair and how busy the workshop is.\nThe biggest factor is drying: a board that took on water has to dry out completely before it's sealed, or the repair won't hold.\nGot a real deadline, like a flight or a contest? Tell Alon in your message and he'll try to make it work.",
-            quick: ["How much does a repair cost?","Talk to Alon"] },
-          "How do I get to the workshop?": { msg: "The workshop is in Kfar Vitkin, on the Southern Bypass Road. Visits are by appointment only — always message before you head out.\nThere's a map with Waze and Google Maps buttons further down the page, under “Visit the workshop”.\nIf Alon isn't there, you leave the board at the house entrance — he sends a short WhatsApp video showing exactly where.",
-            quick: ["Show me the map","Send me the video","Arrange a visit","Talk to Alon"] },
-          "My board took on water": { msg: "Stop surfing it — every session pushes more water in and turns a small repair into a big one.\nWhat to do now:\n• Take it out of the bag and out of the sun\n• Lay it in the shade with the damaged side facing down so the water can drain\n• Don't tape over the hole and keep surfing\nAnd send Alon photos as soon as you can.",
-            quick: ["How should I photograph the damage?","Talk to Alon"] },
-          "How should I photograph the damage?": { msg: "3–5 photos in daylight, no flash, with the board dry and the damaged area free of wax:\n1. A full shot of the whole board\n2. A close-up of the damage, in focus\n3. From the side at an angle — to show depth\n4. With a finger or coin next to it, for scale\n5. If there's more than one damaged spot — a photo of each",
-            quick: ["Talk to Alon"] },
-          "When do I pick up my board?": { msg: "Alon lets you know on WhatsApp as soon as the board is ready, and the pickup period starts from then.\nThe workshop is small, and a finished board waiting around takes the spot of a board that needs fixing — so storage fees apply after that period." +
-            (ST ? "\nCurrently: the first " + ST.freeDays + " days are free, then " + ST.fee + "." : "") +
-            "\nKnow in advance you won't make it in time? Tell Alon before or during the repair and agree on it upfront.",
-            quick: ["Arrange a visit","Talk to Alon"] }
-        };
-      }
-    }
-  }
-};
-
-function waLink(text){
-  return "https://wa.me/" + CONFIG.phone + "?text=" + encodeURIComponent(text);
-}
-// תאימות לאחור — TEMPLATES תמיד מחזיק את הנוסחים בשפה הנוכחית
-let TEMPLATES = {};
-
-function variantName(){
-  const r = document.querySelector('input[name="kv"]:checked');
-  return L().variants[r && r.id === 'kvEpoxy' ? 'epoxy' : 'poly'];
-}
-
-function applyWA(){
-  const t = L().templates;
-  TEMPLATES = Object.assign({}, t, { kit: t.kit(variantName()) });
-  document.querySelectorAll('[data-wa]').forEach(el=>{
-    el.setAttribute('href', waLink(TEMPLATES[el.dataset.wa] || TEMPLATES.general));
-    el.setAttribute('target','_blank');
-    el.setAttribute('rel','noopener');
-  });
-}
-
-function renderKit(){
-  const s = L();
-  document.getElementById('kitName').textContent = s.kitName;
-  document.getElementById('kitPrice').textContent = CONFIG.kit.price || s.kitPriceNone;
-  document.getElementById('kitPriceNote').textContent = s.kitPriceNote || '';
-  const ul = document.getElementById('kitContents');
-  ul.innerHTML = '';
-  s.kitContents.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; ul.appendChild(li); });
-  syncKit();
-}
-function syncKit(){
-  const v = variantName();
-  TEMPLATES.kit = L().templates.kit(v);
-  const order = document.getElementById('kitOrder');
-  order.href = CONFIG.kit.shopUrl;
-  order.textContent = L().kitOrder(v);
-}
-document.querySelectorAll('input[name="kv"]').forEach(r=>r.addEventListener('change', syncKit));
-
-/* החלפת טקסטים: כל אלמנט עם data-i18n מקבל את התרגום מ-I18N_EN */
-const I18N_HE = {};
-function applyLang(lang){
-  LANG = lang;
-  try { localStorage.setItem(LANG_KEY, lang); } catch(e){}
-  const root = document.documentElement;
-  root.lang = lang; root.dir = lang === 'en' ? 'ltr' : 'rtl';
-  document.title = L().title;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k = el.dataset.i18n;
-    if (!(k in I18N_HE)) I18N_HE[k] = el.innerHTML;
-    el.innerHTML = lang === 'en' ? (I18N_EN[k] ?? I18N_HE[k]) : I18N_HE[k];
-  });
-  const a = L().attrs, set = (sel, attr, v) => { const e = document.querySelector(sel); if (e) e.setAttribute(attr, v); };
-  set('#fab','aria-label',a.fab); set('#botwin','aria-label',a.botwin); set('#botclose','aria-label',a.botclose);
-  set('nav','aria-label',a.nav); set('.ba-before img','alt',a.before); set('.ba-after video','aria-label',a.hero);
-  set('#mapframe iframe','title',a.map);
-  document.querySelectorAll('.reel video').forEach((v,i)=>v.setAttribute('aria-label', a['r'+(i+1)]));
-  const lb = document.getElementById('langBtn');
-  lb.textContent = L().langBtn; lb.setAttribute('aria-label', L().langLabel); lb.setAttribute('lang', lang === 'en' ? 'he' : 'en');
-  document.getElementById('telLink').textContent = lang === 'en' ? '+972-54-463-3386' : CONFIG.displayPhone;
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  ['lu1','lu2','lu3'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent = L().legalUpdated; });
-  if (CONFIG.businessId) document.getElementById('bizid').textContent = L().bizid(CONFIG.businessId);
-  document.querySelector('.bot-head .av').textContent = lang === 'en' ? 'A' : 'א';
-  const vc = document.querySelector('#videobox .vcap'); if (vc) vc.textContent = L().vcap;
-  applyWA();
-  renderKit();
-  resetBot();
-}
-document.getElementById('langBtn').addEventListener('click', ()=> applyLang(LANG === 'he' ? 'en' : 'he'));
-
-document.getElementById('telLink').href = "tel:+" + CONFIG.phone;
-document.getElementById('telLink').textContent = CONFIG.displayPhone;
-document.getElementById('yr').textContent = new Date().getFullYear();
-['lu1','lu2','lu3'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent = CONFIG.legalUpdated; });
-if (CONFIG.businessId){
-  document.getElementById('bizid').textContent = CONFIG.businessName + ' · ע.מ/ח.פ ' + CONFIG.businessId;
-}
-window.addEventListener('hashchange', openHash);
-function openHash(){
-  const el = location.hash ? document.querySelector(location.hash) : null;
-  if (el && el.tagName === 'DETAILS'){
-    const box = el.closest('.legalbox');
-    if (box) box.open = true;
-    el.open = true;
-    el.scrollIntoView({behavior:'smooth', block:'center'});
-  }
-}
-openHash();
-
-if (CONFIG.videoUrl){
-  document.getElementById('videobox').innerHTML =
-    '<video controls playsinline preload="metadata" src="'+CONFIG.videoUrl+'"></video>' +
-    (CONFIG.dropoffAddress ? '<p class="vaddr">' + CONFIG.dropoffAddress + '</p>' : '') +
-    '<p class="vcap">הסרטון מראה איפה בדיוק להשאיר את הגלשן כשאלון לא בסדנה.</p>';
-}
-
-/* ============================================================
-   3. עוזר הסדנה — בוט תשובות ראשונות (דו-לשוני)
-   ============================================================ */
-const body = document.getElementById('botbody');
-const quick = document.getElementById('botquick');
-let FLOW = L().bot.flow();
-
-function bubble(text, who){
-  const d = document.createElement('div');
-  d.className = 'msg ' + who;
-  d.textContent = text;
-  body.appendChild(d);
-  body.scrollTop = body.scrollHeight;
-}
-
-function setQuick(list){
-  const B = L().bot;
-  quick.innerHTML = '';
-  list.forEach(label=>{
-    const b = document.createElement('button');
-    b.className = 'qr' + (B.actions[label] || label === B.toShop ? ' go' : '');
-    b.textContent = label;
-    b.addEventListener('click', ()=>handle(label));
-    quick.appendChild(b);
-  });
-  const back = document.createElement('button');
-  back.className = 'qr';
-  back.textContent = B.other;
-  back.addEventListener('click', ()=>{ bubble(B.other,'me'); setTimeout(()=>{ bubble(FLOW.start.msg,'bot'); setQuick(FLOW.start.quick); },250); });
-  quick.appendChild(back);
-}
-
-function handle(label){
-  const B = L().bot;
-  bubble(label, 'me');
-
-  if (B.actions[label]){
-    const url = waLink(TEMPLATES[B.actions[label]]);
-    setTimeout(()=>{
-      bubble(B.opening(),'bot');
-      window.open(url, '_blank', 'noopener');
-      setQuick(FLOW.start.quick);
-    },250);
-    return;
-  }
-  if (label === B.toShop){
-    setTimeout(()=>{
-      bubble(B.shopMsg,'bot');
-      window.open(CONFIG.kit.shopUrl, '_blank', 'noopener');
-      setQuick(FLOW.start.quick);
-    },250);
-    return;
-  }
-  if (label === B.toKit || label === B.toMap){
-    setTimeout(()=>{
-      if (label === B.toMap) bubble(B.mapMsg(),'bot');
-      document.getElementById(label === B.toKit ? 'kit' : 'workshop').scrollIntoView({behavior:'smooth'});
-      closeBot();
-      setQuick(FLOW.start.quick);
-    },250);
-    return;
-  }
-  const node = FLOW[label];
-  setTimeout(()=>{
-    bubble(node ? node.msg : B.unknown,'bot');
-    setQuick(node ? node.quick : [Object.keys(B.actions)[0]]);
-  },280);
-}
-
-const win = document.getElementById('botwin');
-let opened = false;
-function resetBot(){
-  FLOW = L().bot.flow();
-  body.innerHTML = ''; quick.innerHTML = '';
-  if (opened){ bubble(FLOW.start.msg,'bot'); setQuick(FLOW.start.quick); }
-}
-function openBot(){
-  win.classList.add('open');
-  document.getElementById('fab').setAttribute('aria-expanded','true');
-  document.getElementById('fabdot').style.display = 'none';
-  if (!opened){ opened = true; bubble(FLOW.start.msg,'bot'); setQuick(FLOW.start.quick); }
-}
-function closeBot(){ win.classList.remove('open'); document.getElementById('fab').setAttribute('aria-expanded','false'); }
-document.getElementById('fab').addEventListener('click', ()=> win.classList.contains('open') ? closeBot() : openBot());
-document.getElementById('botclose').addEventListener('click', closeBot);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBot(); });
-
-applyLang(LANG);
-
-
-/* ============================================================
-   5. חשיפה בגלילה
-   ============================================================ */
-(function(){
-  const els = document.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches){
-    els.forEach(e=>e.classList.add('in')); return;
-  }
-  const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{rootMargin:'0px 0px -8% 0px'});
-  els.forEach(e=>io.observe(e));
-})();
-</script>
+<!-- סקריפטים: הסדר חשוב — הגדרות ← טקסטים ← לוגיקה -->
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
