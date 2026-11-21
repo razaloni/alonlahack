@@ -2,7 +2,18 @@
   "_הסבר": "הגדרות הסוכן. אפשר לשנות כל מספר כאן בלי לגעת בקוד.",
 
   "search_urls": [
+    "https://www.yad2.co.il/vehicles/private-cars?price=7000-20000",
     "https://www.yad2.co.il/vehicles/cars?price=7000-20000"
+  ],
+
+  "_other_sources_הסבר": "אתרים נוספים. הסוכן מזהה בהם מודעות לפי טקסט (מחיר ₪ + שנתון), בלי להכיר את מבנה האתר. אם התחלה מדף הבית, הוא מחפש קישור למדור רכב יד 2. אפשר להוסיף אתר או לכבות אתר עם enabled=false.",
+  "other_sources": [
+    {"name": "הומלס", "url": "https://www.homeless.co.il/", "enabled": true,
+     "nav_words": ["רכב יד 2", "רכב יד שניה", "רכבים", "רכב"]},
+    {"name": "WinWin", "url": "https://www.winwin.co.il/", "enabled": true,
+     "nav_words": ["רכב יד 2", "רכב יד שניה", "רכבים", "רכב"]},
+    {"name": "iCar", "url": "https://www.icar.co.il/", "enabled": true,
+     "nav_words": ["רכב יד 2", "יד 2", "רכבים משומשים", "רכב משומש"]}
   ],
   "max_pages": 8,
 
@@ -17,7 +28,7 @@
   "automatic_only": true,
   "private_seller_only": true,
   "exclude_promoted_ads": true,
-  "exclude_ownership_keywords": ["ליסינג", "השכרה", "החכר", "מימון", "שעבוד", "מעוקל"],
+  "exclude_ownership_keywords": ["ליסינג", "השכרה", "החכר", "משועבד", "שעבוד", "מעוקל", "עיקול", "ממומן", "מודעה ממומנת", "מקודם"],
 
   "service_history_keywords": [
     "טיפולים", "היסטוריית טיפול", "ספר טיפולים", "ספר רכב", "מוסך מורשה",

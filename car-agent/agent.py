@@ -20,6 +20,8 @@ from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import requests
 
+import sources
+
 HERE = Path(__file__).resolve().parent
 CONFIG_PATH = HERE / "config.json"
 SEEN_PATH = HERE / "seen.json"
@@ -63,12 +65,10 @@ def fetch_html(url: str, session: requests.Session) -> str:
 _browser = None
 
 
-def fetch_html_browser(url: str) -> str:
+def browser_html(url: str) -> str:
+    """Render a page in headless Chromium (one browser reused for the whole run)."""
     global _browser
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        raise BlockedError("Page blocked and Playwright is not installed")
+    from playwright.sync_api import sync_playwright  # ImportError if not installed
     if _browser is None:
         import atexit
         pw = sync_playwright().start()
@@ -77,10 +77,17 @@ def fetch_html_browser(url: str) -> str:
     page = _browser.new_page(user_agent=HEADERS["User-Agent"], locale="he-IL")
     try:
         page.goto(url, wait_until="domcontentloaded", timeout=60000)
-        page.wait_for_timeout(3000)
-        html = page.content()
+        page.wait_for_timeout(4000)
+        return page.content()
     finally:
         page.close()
+
+
+def fetch_html_browser(url: str) -> str:
+    try:
+        html = browser_html(url)
+    except ImportError:
+        raise BlockedError("Page blocked and Playwright is not installed")
     if not NEXT_DATA_RE.search(html):
         low = html.lower()
         if any(m in low for m in BLOCK_MARKERS):
@@ -171,6 +178,7 @@ def normalize(item: dict, bucket: str) -> dict:
     year = _int(dates.get("yearOfProduction")) or _int(item.get("year"))
     car = {
         "token": item["token"],
+        "source": "יד2",
         "url": ITEM_URL.format(token=item["token"]),
         "price": _int(item.get("price")),
         "year": year,
@@ -223,7 +231,8 @@ def reject_reason(car: dict, cfg: dict) -> str | None:
 
 
 def has_service_history(car: dict, cfg: dict) -> bool:
-    return any(kw in car["text"] for kw in cfg["service_history_keywords"])
+    t = car["text"] + " " + car.get("details", "")
+    return any(kw in t for kw in cfg["service_history_keywords"])
 
 
 def is_preferred_model(car: dict, cfg: dict) -> bool:
@@ -272,7 +281,7 @@ def format_alert(cars: list[dict]) -> str:
         if c.get("preferred_model"):
             tags.append("👨‍👩‍👧 משפחתי/בינוני")
         lines.append(
-            f"{i}. {c['title']}\n"
+            f"{i}. {c['title']}  [{c.get('source', '')}]\n"
             f"   💰 {fmt_num(c['price'])} ₪ | 📅 {c['year'] or '?'} | "
             f"🛣️ {fmt_num(c['km'])} ק\"מ | יד {c['hand'] or '?'}\n"
             + (f"   {' · '.join(tags)}\n" if tags else "")
@@ -296,13 +305,13 @@ def send_telegram(text: str) -> bool:
     return r.ok
 
 
-def send_email(text: str) -> bool:
+def send_email(text: str, subject: str) -> bool:
     user, pwd = os.getenv("GMAIL_USER"), os.getenv("GMAIL_APP_PASSWORD")
     to = os.getenv("ALERT_EMAIL_TO") or user
     if not (user and pwd):
         return False
     msg = MIMEText(text, "plain", "utf-8")
-    msg["Subject"] = "🚗 סוכן רכב: נמצאו רכבים חדשים"
+    msg["Subject"] = subject
     msg["From"], msg["To"] = user, to
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
         s.login(user, pwd)
@@ -311,15 +320,15 @@ def send_email(text: str) -> bool:
     return True
 
 
-def notify(text: str) -> None:
+def notify(text: str, subject: str) -> None:
     sent = False
-    for fn in (send_telegram, send_email):
+    for name, fn in (("email", lambda: send_email(text, subject)), ("telegram", lambda: send_telegram(text))):
         try:
-            sent = fn(text) or sent
+            sent = fn() or sent
         except Exception as e:  # keep going with the other channel
-            print(f"{fn.__name__} failed: {e}")
+            print(f"{name} failed: {e}")
     if not sent:
-        print("No notification channel configured (set Telegram or Gmail secrets).")
+        print("No notification channel configured (set Gmail or Telegram secrets).")
 
 
 # --------------------------------------------------------------------------- main
@@ -330,13 +339,29 @@ def load_json(path: Path, default):
         return default
 
 
-def collect(cfg: dict, session: requests.Session) -> list[dict]:
+def fetch_any(url: str, session: requests.Session) -> str:
+    """For non-Yad2 sites: prefer a real browser (pages are often built by JS)."""
+    try:
+        return browser_html(url)
+    except Exception as e:
+        print(f"  browser failed ({e}); trying plain request")
+        r = session.get(url, headers=HEADERS, timeout=30)
+        r.raise_for_status()
+        return r.text
+
+
+def collect_yad2(cfg: dict, session: requests.Session) -> tuple[list[dict], str]:
     cars: dict[str, dict] = {}
+    errors = []
     for base in cfg["search_urls"]:
         for page in range(1, cfg["max_pages"] + 1):
             url = with_page(base, page)
             print(f"Fetching {url}")
-            items = find_listings(next_data(fetch_html(url, session)))
+            try:
+                items = find_listings(next_data(fetch_html(url, session)))
+            except Exception as e:
+                errors.append(str(e)[:80])
+                break
             print(f"  {len(items)} listings")
             if not items:
                 break
@@ -344,16 +369,63 @@ def collect(cfg: dict, session: requests.Session) -> list[dict]:
                 c = normalize(it, bucket)
                 cars.setdefault(c["token"], c)
             time.sleep(2)
-    return list(cars.values())
+    if cars:
+        return list(cars.values()), f"{len(cars)} מודעות"
+    return [], "נחסם / נכשל" + (f" ({errors[0]})" if errors else "")
+
+
+def collect(cfg: dict, session: requests.Session, state: dict) -> tuple[list[dict], dict]:
+    """All sources. Returns (cars, {source name: status text})."""
+    status: dict[str, str] = {}
+    all_cars, status["יד2"] = collect_yad2(cfg, session)
+    for src in cfg.get("other_sources", []):
+        if not src.get("enabled", True):
+            continue
+        print(f"Scanning {src['name']} ({src['url']})")
+        cars, status[src["name"]] = sources.scan_source(
+            src, lambda u: fetch_any(u, session), state
+        )
+        print(f"  {status[src['name']]}")
+        all_cars += cars
+    return all_cars, status
+
+
+def strip_tags(html: str) -> str:
+    html = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
+    return " ".join(re.sub(r"<[^>]+>", " ", html).split())
 
 
 def enrich(car: dict, session: requests.Session) -> None:
-    """Fetch the ad page to read its full description (service history etc.)."""
+    """Open the ad page to read its full description.
+
+    Whole-page text (menus, "similar ads") goes to car["details"], which is
+    used ONLY for positive signals like service history - never to reject.
+    Only text that belongs to this ad itself goes into car["text"].
+    """
     try:
-        data = next_data(fetch_html(car["url"], session))
-        car["text"] += " " + flatten_text(data.get("props", data))
+        if car.get("source") == "יד2":
+            data = next_data(fetch_html(car["url"], session))
+            own = [it for it, _ in find_listings(data) if it["token"] == car["token"]]
+            if own:
+                car["text"] += " " + flatten_text(own[0])
+            else:
+                car["details"] = flatten_text(data.get("props", data))
+            return
+        full = strip_tags(fetch_any(car["url"], session))[:20000]
+        car["details"] = full
+        parsed = sources.parse_car_text(full)
+        for k in ("km", "hand", "year"):
+            if not car.get(k) and parsed.get(k):
+                car[k] = parsed[k]
+        auto, manual = "אוטומט" in full, "ידני" in full
+        if not car.get("gear") and auto != manual:  # only when unambiguous
+            car["gear"] = "אוטומטי" if auto else "ידני"
     except Exception as e:
         print(f"  details failed for {car['token']}: {e}")
+
+
+def status_report(status: dict) -> str:
+    return "\n📡 מצב הסריקה:\n" + "\n".join(f"• {k}: {v}" for k, v in status.items())
 
 
 def run(dry_run: bool) -> int:
@@ -361,12 +433,17 @@ def run(dry_run: bool) -> int:
     seen: dict = load_json(SEEN_PATH, {})
     session = requests.Session()
 
-    try:
-        cars = collect(cfg, session)
-    except BlockedError as e:
-        print(f"BLOCKED: {e}")
-        return 2
+    cars, status = collect(cfg, session, seen)
     print(f"Total unique listings: {len(cars)}")
+    print(status_report(status))
+    today = time.strftime("%Y-%m-%d")
+    if not cars:
+        print("BLOCKED: no source returned listings")
+        if not dry_run and seen.get("__last_warning") != today:
+            notify("⚠️ סוכן הרכב לא הצליח לקרוא אף אתר בהרצה הזאת.\n"
+                   "ייתכן שהאתרים חוסמים בוטים. שלחו את הלוג מ-GitHub Actions לתיקון.\n"
+                   + status_report(status), "⚠️ סוכן רכב: הסריקה נכשלה")
+            seen["__last_warning"] = today
 
     rejects: dict[str, int] = {}
     passed = []
@@ -400,17 +477,16 @@ def run(dry_run: bool) -> int:
     top = final[: cfg["alert_top_n"]]
 
     if top:
-        text = format_alert(top)
+        text = format_alert(top) + "\n" + status_report(status)
         print(text)
         if not dry_run:
-            notify(text)
+            notify(text, f"🚗 סוכן רכב: {len(top)} רכבים חדשים")
     else:
         print("No new matching cars this run.")
 
     if not dry_run:
-        now = time.strftime("%Y-%m-%d")
         for c in top + late_rejects:  # alerted (or ruled out) -> don't show again
-            seen[c["token"]] = now
+            seen[c["token"]] = today
         SEEN_PATH.write_text(json.dumps(seen, ensure_ascii=False, indent=0), encoding="utf-8")
     return 0
 

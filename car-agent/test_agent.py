@@ -77,5 +77,46 @@ class AgentTests(unittest.TestCase):
         )
 
 
+import sources  # noqa: E402
+
+GENERIC_HTML = """<html><body>
+<a href="/nav/cars">רכב יד 2</a>
+<a href="/ad/111"><div>טויוטה קורולה 2013</div><span>אוטומט</span> <span>140,000 ק"מ</span> יד 2 <b>₪ 16,500</b></a>
+<a href="/ad/222">מאזדה 3 2011 ידני 120,000 ק"מ 13,000 ₪</a>
+<a href="/ad/333">יונדאי i30 2012 אוטומטי 150,000 ק"מ 17,000 ₪ מודעה ממומנת</a>
+<a href="https://other.site/ad/9">קיה 2014 14,000 ₪</a>
+<a href="/about">אודות</a>
+</body></html>"""
+
+
+class GenericSourceTests(unittest.TestCase):
+    def cars(self):
+        return {c["url"].rsplit("/", 1)[-1]: c
+                for c in sources.cards_from_html(GENERIC_HTML, "https://site.co.il/", "בדיקה")}
+
+    def test_parse_text(self):
+        f = sources.parse_car_text('קורולה 2013 אוטומט 140,000 ק"מ יד 2 ₪ 16,500')
+        self.assertEqual((f["price"], f["year"], f["km"], f["hand"], f["gear"]),
+                         (16500, 2013, 140000, 2, "אוטומטי"))
+
+    def test_cards_same_domain_only(self):
+        self.assertEqual(set(self.cars()), {"111", "222", "333"})
+
+    def test_generic_filters(self):
+        c = self.cars()
+        self.assertIsNone(agent.reject_reason(c["111"], CFG))
+        self.assertEqual(agent.reject_reason(c["222"], CFG), "gear")
+        self.assertIn(agent.reject_reason(c["333"], CFG), ("promoted",) + tuple(
+            "ownership:" + k for k in CFG["exclude_ownership_keywords"]))
+
+    def test_section_discovery(self):
+        pages = {"https://site.co.il/": "<a href='/used'>רכב יד 2</a>", "https://site.co.il/used": GENERIC_HTML}
+        state = {}
+        cars, status = sources.scan_source(
+            {"name": "בדיקה", "url": "https://site.co.il/", "nav_words": ["רכב יד 2"]}, pages.__getitem__, state)
+        self.assertEqual(len(cars), 3)
+        self.assertEqual(state["__section:בדיקה"], "https://site.co.il/used")
+
+
 if __name__ == "__main__":
     unittest.main()
