@@ -20,6 +20,7 @@ from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import requests
 
+import discovery
 import sources
 
 HERE = Path(__file__).resolve().parent
@@ -387,6 +388,11 @@ def collect(cfg: dict, session: requests.Session, state: dict) -> tuple[list[dic
         )
         print(f"  {status[src['name']]}")
         all_cars += cars
+    known = {"yad2.co.il"} | {discovery.domain_of(s["url"]) for s in cfg.get("other_sources", [])}
+    print("Web discovery")
+    cars, st = discovery.discover(cfg, lambda u: fetch_any(u, session), state, known)
+    all_cars += cars
+    status.update(st)
     return all_cars, status
 
 

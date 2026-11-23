@@ -118,5 +118,46 @@ class GenericSourceTests(unittest.TestCase):
         self.assertEqual(state["__section:בדיקה"], "https://site.co.il/used")
 
 
+import discovery  # noqa: E402
+
+DDG_HTML = """
+<a rel="nofollow" class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fcars-board.co.il%2Fused&amp;rut=x">לוח רכבים</a>
+<a rel="nofollow" class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fsmall-site.co.il%2Fad%2F55&amp;rut=y">מודעה</a>
+<a rel="nofollow" class="result__a" href="https://www.facebook.com/marketplace">fb</a>
+"""
+SINGLE_AD = """<html><head><title>למכירה מאזדה 3 2012 אוטומטית 150,000 ק"מ 15,500 ₪</title>
+<meta name="description" content="יד 2, כל הטיפולים במוסך"></head><body>...</body></html>"""
+
+
+class DiscoveryTests(unittest.TestCase):
+    def test_parse_ddg(self):
+        self.assertEqual(discovery.parse_ddg(DDG_HTML)[:2],
+                         ["https://cars-board.co.il/used", "https://small-site.co.il/ad/55"])
+
+    def test_single_ad(self):
+        ad = discovery.single_ad(SINGLE_AD, "https://small-site.co.il/ad/55")
+        self.assertEqual((ad["price"], ad["year"], ad["gear"]), (15500, 2012, "אוטומטי"))
+        self.assertIsNone(agent.reject_reason(ad, CFG))
+
+    def test_discover_remembers_sites_and_drops_dead_ones(self):
+        orig = discovery.web_search
+        discovery.web_search = lambda q, n: discovery.parse_ddg(DDG_HTML)
+        pages = {"https://cars-board.co.il/used": GENERIC_HTML, "https://small-site.co.il/ad/55": SINGLE_AD}
+        state = {}
+        try:
+            cars, status = discovery.discover(CFG, pages.__getitem__, state, set())
+        finally:
+            discovery.web_search = orig
+        self.assertIn("cars-board.co.il", state["__discovered"])
+        self.assertNotIn("facebook.com", state["__discovered"])
+        self.assertEqual(len(cars), 4)  # 3 cards + 1 single ad
+        # site goes dead: dropped after 3 failed runs
+        cfg = dict(CFG, discovery=dict(CFG["discovery"], search_queries=[]))
+        dead = lambda u: (_ for _ in ()).throw(IOError("down"))
+        for _ in range(3):
+            discovery.discover(cfg, dead, state, set())
+        self.assertNotIn("cars-board.co.il", state["__discovered"])
+
+
 if __name__ == "__main__":
     unittest.main()

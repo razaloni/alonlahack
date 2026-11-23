@@ -17,6 +17,33 @@
   ],
   "max_pages": 8,
 
+  "_discovery_הסבר": "חיפוש ברשת: בכל הרצה הסוכן מחפש כמה מהשאילתות (ברוטציה), פותח את התוצאות, וזוכר כל אתר שיש בו מודעות רכב כדי לסרוק אותו בכל הרצה הבאה.",
+  "discovery": {
+    "enabled": true,
+    "queries_per_run": 3,
+    "results_per_query": 10,
+    "max_discovered_sites_per_run": 15,
+    "search_queries": [
+      "רכב יד 2 למכירה אוטומטי מפרטי",
+      "מודעות רכב יד שניה למכירה",
+      "רכב משפחתי יד שניה למכירה אוטומט",
+      "למכירה טויוטה קורולה יד 2 אוטומט",
+      "למכירה מאזדה 3 יד 2 אוטומטית",
+      "למכירה יונדאי i30 יד 2",
+      "למכירה סקודה אוקטביה יד 2",
+      "למכירה קיה סיד יד 2",
+      "לוח מודעות רכבים משומשים",
+      "רכב יד 2 עד 20000 שקל",
+      "רכב משומש למכירה בעל רכב פרטי",
+      "קניית רכב יד שניה מודעות חדשות"
+    ],
+    "blocked_domains": [
+      "facebook.com", "instagram.com", "tiktok.com", "youtube.com", "wikipedia.org",
+      "x.com", "twitter.com", "linkedin.com", "google.com", "yad2.co.il",
+      "ynet.co.il", "maariv.co.il", "walla.co.il", "themarker.com", "calcalist.co.il", "globes.co.il"
+    ]
+  },
+
   "price_min": 7000,
   "price_max": 20000,
   "price_ideal": 15000,
